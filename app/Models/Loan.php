@@ -20,13 +20,13 @@ class Loan extends Model
     ];
 
     /**
-     * Relashionship one-to-many wih Book model.
+     * Relationship many-to-one with Book model.
      *
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function book()
     {
-        return $this->hasMany(Book::class);
+        return $this->belongsTo(Book::class);
     }
 
     public function isOverdue(): bool
