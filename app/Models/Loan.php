@@ -33,13 +33,4 @@ class Loan extends Model
     {
         return $this->due_date < now() && is_null($this->returned_at);
     }
-
-    public function isAvailable(): bool
-    {
-        $activeLoans = $this->where('book_id', $this->book_id)
-            ->whereNull('returned_at')
-            ->exists();
-
-        return !$activeLoans;
-    }
 }

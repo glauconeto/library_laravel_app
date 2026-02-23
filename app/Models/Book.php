@@ -19,8 +19,10 @@ class Book extends Model
         'author',
         'gender',
         'year',
-        'ISBN',
-        'stock'
+        'isbn',
+        'stock',
+        'description',
+        'user_id'
     ];
 
     protected $guarded = [];
@@ -52,19 +54,22 @@ class Book extends Model
      */
     public function isAvailableForLoan(): bool
     {
-        return $this->copies_available > 0;
+        $activeLoans = $this->loans()
+            ->whereNull('returned_at')
+            ->count();
+        
+        return $this->stock > $activeLoans;
     }
 
     /**
      * Method to reserve a book
      *
-     * @return void
+     * @return bool
      */
-    public function reserve(): void
+    public function reserve(): bool
     {
-        if ($this->isAvailableForLoan()) {
-            $this->copies_available -= 1;
-            $this->save();
+        if (! $this->isAvailableForLoan()) {
+            return false;
         }
     }
 
