@@ -20,8 +20,12 @@ services:
         volumes:
             - '.:/var/www/html'
         networks:
+            - default
             - sail
         depends_on: {  }
 networks:
+    default:
+        external: true
+        name: postgres_docker_postgres-network
     sail:
         driver: bridge
