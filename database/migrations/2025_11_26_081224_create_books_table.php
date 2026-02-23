@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('author');
             $table->string('gender');
             $table->integer('year');
-            $table->integer('ISBN', 20)->unique();
+            $table->string('isbn', 20)->unique();
             $table->text('description')->nullable();
             $table->unsignedInteger('stock')->default(1);
             $table->timestamps();
