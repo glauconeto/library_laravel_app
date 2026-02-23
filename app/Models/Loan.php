@@ -33,4 +33,39 @@ class Loan extends Model
     {
         return $this->due_date < now() && is_null($this->returned_at);
     }
+
+    public function refreshStatus(): void
+    {
+        if ($this->returned_at !== null) {
+            $this->status = 'returned';
+            $this->save();
+            return;
+        }
+
+        if ($this->due_date < now()) {
+            $this->status = 'overdue';
+            $this->save();
+            return;
+        }
+
+        $this->status = 'pending';
+        $this->save();
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (Loan $loan) {
+            if ($loan->returned_at !== null) {
+                $loan->status = 'returned';
+                return;
+            }
+
+            if ($loan->due_date < now()) {
+                $loan->status = 'overdue';
+                return;
+            }
+
+            $loan->status = 'pending';
+        });
+    } 
 }

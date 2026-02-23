@@ -25,8 +25,6 @@ class Book extends Model
         'user_id'
     ];
 
-    protected $guarded = [];
-
     /**
      * Relationship one-to-many with loans model.
      *
@@ -61,26 +59,8 @@ class Book extends Model
         return $this->stock > $activeLoans;
     }
 
-    /**
-     * Method to reserve a book
-     *
-     * @return bool
-     */
     public function reserve(): bool
     {
-        if (! $this->isAvailableForLoan()) {
-            return false;
-        }
-    }
-
-    /**
-     * Method to return book to stock.
-     *
-     * @return void
-     */
-    public function returnBook(): void
-    {
-        $this->copies_available += 1;
-        $this->save();
+        return $this->isAvailableForLoan();
     }
 }
