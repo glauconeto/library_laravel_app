@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Models\Role;
 
 class RolesSeeder extends Seeder
@@ -12,12 +13,15 @@ class RolesSeeder extends Seeder
      */
     public function run(): void
     {
-        // Criando roles
-        $reader = Role::create(['name' => 'reader']);
-        $librarian = Role::create(['name' => 'librarian']);
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        // Atribuindo permissões para os papéis
+        $guard = 'web';
+
+        // Criando roles
+        $reader = Role::findOrCreate('reader', $guard);
+        $librarian = Role::findOrCreate('librarian', $guard);
+
         $reader->givePermissionTo(['view books', 'borrow books']);
-        $librarian->givePermissionTo(['view books', 'borrow books', 'manage books', 'manage loans']); 
+        $librarian->givePermissionTo(['view books', 'borrow books', 'manage books', 'manage loans']);
     }
 }

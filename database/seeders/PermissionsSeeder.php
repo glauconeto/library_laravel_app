@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Models\Permission;
 
 class PermissionsSeeder extends Seeder
@@ -13,9 +13,13 @@ class PermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['name' => 'view books']);
-        Permission::create(['name' => 'borrow books']);
-        Permission::create(['name' => 'manage books']);
-        Permission::create(['name' => 'manage loans']);
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+        $guard = 'web';
+
+        Permission::findOrCreate('view books', $guard);
+        Permission::findOrCreate('borrow books', $guard);
+        Permission::findOrCreate('manage books', $guard);
+        Permission::findOrCreate('manage loans', $guard);
     }
 }
