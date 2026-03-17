@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Book extends Model
 {
@@ -17,7 +18,7 @@ class Book extends Model
     protected $fillable = [
         'title',
         'author',
-        'gender',
+        'genre',
         'year',
         'isbn',
         'stock',
@@ -25,42 +26,29 @@ class Book extends Model
         'user_id'
     ];
 
-    /**
-     * Relationship one-to-many with loans model.
-     *
-     * @return void
-     */
-    public function loans()
+    /** @return HasMany<Loan, $this> */
+    public function loans(): HasMany
     {
         return $this->hasMany(Loan::class);
     }
 
-    /**
-     * Relationship one-to-many with feedbacks model.
-     *
-     * @return void
-     */
-    public function feedbacks()
+    /** @return HasMany<Feedback, $this> */
+    public function feedbacks(): HasMany
     {
         return $this->hasMany(Feedback::class);
     }
 
     /**
      * Determine if given book is available for loan.
-     *
-     * @return boolean copies_available
+     * 
+     * @return bool
      */
     public function isAvailableForLoan(): bool
     {
         $activeLoans = $this->loans()
             ->whereNull('returned_at')
             ->count();
-        
-        return $this->stock > $activeLoans;
-    }
 
-    public function reserve(): bool
-    {
-        return $this->isAvailableForLoan();
+        return $this->stock > $activeLoans;
     }
 }
