@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\LoanStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Loan extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -19,11 +23,21 @@ class Loan extends Model
         'returned_at'
     ];
 
-    /**
-     * Relationship many-to-one with Book model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+    protected function casts(): array
+    {
+        return [
+            'status' => LoanStatus::class,
+            'loan_date' => 'date',
+            'due_date' => 'date',
+            'returned_at' => 'datetime',
+        ];
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function book()
     {
         return $this->belongsTo(Book::class);
@@ -34,38 +48,20 @@ class Loan extends Model
         return $this->due_date < now() && is_null($this->returned_at);
     }
 
-    public function refreshStatus(): void
-    {
-        if ($this->returned_at !== null) {
-            $this->status = 'returned';
-            $this->save();
-            return;
-        }
-
-        if ($this->due_date < now()) {
-            $this->status = 'overdue';
-            $this->save();
-            return;
-        }
-
-        $this->status = 'pending';
-        $this->save();
-    }
-
     protected static function booted(): void
     {
         static::saving(function (Loan $loan) {
             if ($loan->returned_at !== null) {
-                $loan->status = 'returned';
+                $loan->status = LoanStatus::Returned;
                 return;
             }
 
             if ($loan->due_date < now()) {
-                $loan->status = 'overdue';
+                $loan->status = LoanStatus::Overdue;
                 return;
             }
 
-            $loan->status = 'pending';
+            $loan->status = LoanStatus::Pending;
         });
-    } 
+    }
 }
