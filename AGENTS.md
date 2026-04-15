@@ -37,12 +37,14 @@ O objetivo de quem atuar aqui, seja pessoa ou agente, é:
 
 1. Nunca trabalhar direto na `main` para features, refactors ou bugfixes.
 2. Criar uma branch por assunto.
-3. Evitar commits grandes com temas misturados.
-4. Não commitar `.env`, arquivos locais temporários ou lixo de editor.
-5. Não commitar `.codex` sem necessidade explícita.
-6. Não alterar permissão de arquivos PHP para executável.
-7. Manter `artisan` como executável.
-8. Antes de finalizar, revisar `git diff` e `git status`.
+3. Executar uma etapa por vez.
+4. Ao concluir uma etapa, parar, revisar o resultado e só então seguir para a próxima.
+5. Evitar commits grandes com temas misturados.
+6. Não commitar `.env`, arquivos locais temporários ou lixo de editor.
+7. Não commitar `.codex` sem necessidade explícita.
+8. Não alterar permissão de arquivos PHP para executável.
+9. Manter `artisan` como executável.
+10. Antes de finalizar, revisar `git diff` e `git status`.
 
 ## Convenção de branches
 
