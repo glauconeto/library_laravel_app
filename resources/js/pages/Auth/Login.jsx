@@ -26,6 +26,10 @@ export default function Login({ canResetPassword, status }) {
         <AuthCard>
             <Head title="Login" />
 
+            <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">
+                Sistema de Livraria
+            </h1>
+
             <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
                 {status}
             </div>
