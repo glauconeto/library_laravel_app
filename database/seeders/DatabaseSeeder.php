@@ -23,12 +23,14 @@ class DatabaseSeeder extends Seeder
         $reader = User::factory()->create([
             'name' => 'Reader User',
             'email' => 'reader@example.com',
+            'password' => bcrypt('password'),
         ]);
         $reader->assignRole('reader');
 
         $librarian = User::factory()->create([
             'name' => 'Librarian User',
             'email' => 'librarian@example.com',
+            'password' => bcrypt('password'),
         ]);
         $librarian->assignRole('librarian');
     }
