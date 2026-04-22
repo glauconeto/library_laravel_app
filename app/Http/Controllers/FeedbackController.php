@@ -29,7 +29,10 @@ class FeedbackController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        $books = Book::orderBy('title')->pluck('title', 'id');
+        $books = Book::orderBy('title')->get(['id', 'title'])->map(fn ($book) => [
+            'value' => $book->id,
+            'label' => $book->title,
+        ]);
 
         return Inertia::render('Feedbacks/Index', [
             'feedbacks' => $feedbacks,
@@ -50,7 +53,7 @@ class FeedbackController extends Controller
                                   ->first();
 
         if ($existingFeedback) {
-            return back()->with('error', 'You have already reviewed this book.');
+            return back()->with('error', 'Você já avaliou este livro.');
         }
 
         $hasActiveLoan = Loan::where('user_id', $user->id)
@@ -59,7 +62,7 @@ class FeedbackController extends Controller
                            ->exists();
 
         if (!$hasActiveLoan && !$user->hasRole('librarian')) {
-            return back()->with('error', 'You can only review books you have borrowed and returned.');
+            return back()->with('error', 'Você só pode avaliar livros que pegou emprestado e devolveu.');
         }
 
         $validated = $request->validate([
@@ -75,7 +78,7 @@ class FeedbackController extends Controller
         ]);
 
         return redirect()->route('books.show', $book)
-            ->with('success', 'Your review has been submitted successfully.');
+            ->with('success', 'Sua avaliação foi enviada com sucesso.');
     }
 
     /**
@@ -117,7 +120,7 @@ class FeedbackController extends Controller
         $feedback->update($validated);
 
         return redirect()->route('books.show', $feedback->book)
-            ->with('success', 'Your review has been updated successfully.');
+            ->with('success', 'Sua avaliação foi atualizada com sucesso.');
     }
 
     /**
@@ -131,6 +134,6 @@ class FeedbackController extends Controller
         $feedback->delete();
 
         return redirect()->route('books.show', $book)
-            ->with('success', 'Your review has been deleted successfully.');
+            ->with('success', 'Sua avaliação foi excluída com sucesso.');
     }
 }

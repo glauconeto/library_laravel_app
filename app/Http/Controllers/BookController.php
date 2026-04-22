@@ -81,7 +81,7 @@ class BookController extends Controller
         Book::create($validated);
 
         return redirect()->route('books.index')
-            ->with('success', 'Book created successfully.');
+            ->with('success', 'Livro criado com sucesso.');
     }
 
     /**
@@ -147,7 +147,7 @@ class BookController extends Controller
         $book->update($validated);
 
         return redirect()->route('books.index')
-            ->with('success', 'Book updated successfully.');
+            ->with('success', 'Livro atualizado com sucesso.');
     }
 
     /**
@@ -159,12 +159,12 @@ class BookController extends Controller
 
         if ($book->loans()->whereNull('returned_at')->exists()) {
             return redirect()->route('books.index')
-                ->with('error', 'Cannot delete book with active loans.');
+                ->with('error', 'Não é possível excluir um livro com empréstimos ativos.');
         }
 
         $book->delete();
 
         return redirect()->route('books.index')
-            ->with('success', 'Book deleted successfully.');
+            ->with('success', 'Livro excluído com sucesso.');
     }
 }

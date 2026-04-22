@@ -53,11 +53,11 @@ class LoanController extends Controller
         $user = auth()->user();
 
         if (!$user->canBorrow()) {
-            return back()->with('error', 'You have reached the maximum limit of 3 active loans.');
+            return back()->with('error', 'Você atingiu o limite máximo de 3 empréstimos ativos.');
         }
 
         if (!$book->isAvailableForLoan()) {
-            return back()->with('error', 'This book is not available for loan.');
+            return back()->with('error', 'Este livro não está disponível para empréstimo.');
         }
 
         $existingLoan = Loan::where('user_id', $user->id)
@@ -66,7 +66,7 @@ class LoanController extends Controller
                            ->first();
 
         if ($existingLoan) {
-            return back()->with('error', 'You already have an active loan for this book.');
+            return back()->with('error', 'Você já tem um empréstimo ativo para este livro.');
         }
 
         $loan = Loan::create([
@@ -77,13 +77,13 @@ class LoanController extends Controller
         ]);
 
         return redirect()->route('loans.index')
-            ->with('success', "Book '{$book->title}' borrowed successfully. Due date: {$loan->due_date->format('Y-m-d')}");
+            ->with('success', "Livro '{$book->title}' emprestado com sucesso. Data de devolução: {$loan->due_date->format('d/m/Y')}");
     }
 
     /**
      * Return a book.
      */
-    public function return(Request $request, Loan $loan): RedirectResponse
+    public function return(Loan $loan): RedirectResponse
     {
         $user = auth()->user();
 
@@ -92,13 +92,13 @@ class LoanController extends Controller
         }
 
         if ($loan->returned_at) {
-            return back()->with('error', 'This book has already been returned.');
+            return back()->with('error', 'Este livro já foi devolvido.');
         }
 
         $loan->update(['returned_at' => now()]);
 
         return redirect()->route('loans.index')
-            ->with('success', "Book '{$loan->book->title}' returned successfully.");
+            ->with('success', "Livro '{$loan->book->title}' devolvido com sucesso.");
     }
 
     /**
@@ -129,19 +129,19 @@ class LoanController extends Controller
         $this->authorize('delete', $loan);
 
         if (!$loan->returned_at) {
-            return back()->with('error', 'Cannot delete an active loan. Return the book first.');
+            return back()->with('error', 'Não é possível excluir um empréstimo ativo. Devolva o livro primeiro.');
         }
 
         $loan->delete();
 
         return redirect()->route('loans.index')
-            ->with('success', 'Loan record deleted successfully.');
+            ->with('success', 'Registro de empréstimo excluído com sucesso.');
     }
 
     /**
      * Extend loan due date.
      */
-    public function extend(Request $request, Loan $loan): RedirectResponse
+    public function extend(Loan $loan): RedirectResponse
     {
         $user = auth()->user();
 
@@ -150,17 +150,17 @@ class LoanController extends Controller
         }
 
         if ($loan->returned_at) {
-            return back()->with('error', 'Cannot extend a returned loan.');
+            return back()->with('error', 'Não é possível estender um empréstimo devolvido.');
         }
 
         if ($loan->isOverdue()) {
-            return back()->with('error', 'Cannot extend an overdue loan.');
+            return back()->with('error', 'Não é possível estender um empréstimo atrasado.');
         }
 
         $newDueDate = $loan->due_date->addDays(7);
         $loan->update(['due_date' => $newDueDate]);
 
         return redirect()->route('loans.index')
-            ->with('success', "Loan extended until {$newDueDate->format('Y-m-d')}.");
+            ->with('success', "Empréstimo estendido até {$newDueDate->format('d/m/Y')}.");
     }
 }
