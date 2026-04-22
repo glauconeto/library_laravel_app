@@ -6,7 +6,7 @@ import PrimaryButton from '../../Components/PrimaryButton';
 export default function LoansShow({ loan, isOverdue, daysOverdue }) {
     return (
         <AppLayout>
-            <Head title={`Loan Details - ${loan.book.title}`} />
+            <Head title={`Detalhes do Empréstimo - ${loan.book.title}`} />
 
             <div className="py-12">
                 <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
@@ -16,16 +16,16 @@ export default function LoansShow({ loan, isOverdue, daysOverdue }) {
                             <div className="flex justify-between items-start mb-6">
                                 <div>
                                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                                        Loan Details
+                                        Detalhes do Empréstimo
                                     </h1>
                                     <p className="text-gray-600 dark:text-gray-400">
-                                        Loan ID: #{loan.id}
+                                        Empréstimo ID: #{loan.id}
                                     </p>
                                 </div>
                                 <div className="flex gap-2">
                                     <Link href={route('books.show', loan.book.id)}>
                                         <PrimaryButton>
-                                            View Book
+                                            Ver Livro
                                         </PrimaryButton>
                                     </Link>
                                 </div>
@@ -35,12 +35,12 @@ export default function LoansShow({ loan, isOverdue, daysOverdue }) {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                 <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                                        📚 Book Information
+                                        📚 Informações do Livro
                                     </h2>
                                     <div className="space-y-3">
                                         <div>
                                             <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                Title
+                                                Título
                                             </span>
                                             <Link
                                                 href={route('books.show', loan.book.id)}
@@ -51,7 +51,7 @@ export default function LoansShow({ loan, isOverdue, daysOverdue }) {
                                         </div>
                                         <div>
                                             <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                Author
+                                                Autor
                                             </span>
                                             <span className="text-gray-900 dark:text-white">
                                                 {loan.book.author}
@@ -70,12 +70,12 @@ export default function LoansShow({ loan, isOverdue, daysOverdue }) {
 
                                 <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                                        👤 Borrower Information
+                                        👤 Informações do Usuário
                                     </h2>
                                     <div className="space-y-3">
                                         <div>
                                             <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                Name
+                                                Nome
                                             </span>
                                             <span className="text-gray-900 dark:text-white">
                                                 {loan.user.name}
@@ -96,12 +96,12 @@ export default function LoansShow({ loan, isOverdue, daysOverdue }) {
                             {/* Loan Details */}
                             <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-8">
                                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                                    📅 Loan Timeline
+                                    📅 Linha do Tempo do Empréstimo
                                 </h2>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div>
                                         <span className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
-                                            Borrowed Date
+                                            Data de Retirada
                                         </span>
                                         <span className="text-gray-900 dark:text-white">
                                             {new Date(loan.loan_date).toLocaleDateString()}
@@ -109,7 +109,7 @@ export default function LoansShow({ loan, isOverdue, daysOverdue }) {
                                     </div>
                                     <div>
                                         <span className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
-                                            Due Date
+                                            Data de Devolução
                                         </span>
                                         <span className={`font-semibold ${
                                             isOverdue
@@ -131,10 +131,10 @@ export default function LoansShow({ loan, isOverdue, daysOverdue }) {
                                                 : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
                                         }`}>
                                             {loan.returned_at
-                                                ? 'Returned'
+                                                ? 'Devolvido'
                                                 : isOverdue
-                                                ? `${daysOverdue} days overdue`
-                                                : 'Active'
+                                                ? `${daysOverdue} dias de atraso`
+                                                : 'Ativo'
                                             }
                                         </span>
                                     </div>
@@ -143,7 +143,7 @@ export default function LoansShow({ loan, isOverdue, daysOverdue }) {
                                 {loan.returned_at && (
                                     <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
                                         <span className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
-                                            Returned Date
+                                            Data da Devolução
                                         </span>
                                         <span className="text-green-600 dark:text-green-400 font-semibold">
                                             {new Date(loan.returned_at).toLocaleDateString()}
@@ -156,14 +156,14 @@ export default function LoansShow({ loan, isOverdue, daysOverdue }) {
                             {!loan.returned_at && (
                                 <div className="bg-yellow-50 dark:bg-yellow-900 border border-yellow-200 dark:border-yellow-700 rounded-lg p-6">
                                     <h2 className="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-4">
-                                        ⚠️ Active Loan
+                                        ⚠️ Empréstimo Ativo
                                     </h2>
                                     <div className="flex items-center justify-between">
                                         <div>
                                             <p className="text-yellow-800 dark:text-yellow-200">
                                                 {isOverdue
-                                                    ? `This loan is ${daysOverdue} days overdue. Please return the book as soon as possible.`
-                                                    : 'This book is currently borrowed. Please return it by the due date.'
+                                                    ? `Este empréstimo está ${daysOverdue} dias atrasado. Por favor, devolva o livro o quanto antes.`
+                                                    : 'Este livro está emprestado atualmente. Por favor, devolva até a data de vencimento.'
                                                 }
                                             </p>
                                         </div>
@@ -174,7 +174,7 @@ export default function LoansShow({ loan, isOverdue, daysOverdue }) {
                                                     disabled={isOverdue}
                                                     className={isOverdue ? 'opacity-50 cursor-not-allowed' : ''}
                                                 >
-                                                    Extend 7 Days
+                                                    Estender 7 Dias
                                                 </PrimaryButton>
                                             </form>
                                             <form method="POST" action={route('loans.return', loan.id)}>
@@ -182,7 +182,7 @@ export default function LoansShow({ loan, isOverdue, daysOverdue }) {
                                                     type="submit"
                                                     className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-150"
                                                 >
-                                                    Return Book
+                                                    Devolver Livro
                                                 </button>
                                             </form>
                                         </div>
@@ -194,15 +194,15 @@ export default function LoansShow({ loan, isOverdue, daysOverdue }) {
                             {loan.returned_at && (
                                 <div className="bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-lg p-6">
                                     <h2 className="text-lg font-semibold text-green-800 dark:text-green-200 mb-4">
-                                        ✅ Book Returned
+                                        ✅ Livro Devolvido
                                     </h2>
                                     <p className="text-green-800 dark:text-green-200">
-                                        This book has been successfully returned. Thank you for using our library!
+                                        Este livro foi devolvido com sucesso. Obrigado por usar nossa biblioteca!
                                     </p>
                                     <div className="mt-4">
                                         <Link href={route('books.show', loan.book.id)}>
                                             <PrimaryButton>
-                                                Borrow This Book Again
+                                                Pegar Este Livro Emprestado Novamente
                                             </PrimaryButton>
                                         </Link>
                                     </div>

@@ -49,13 +49,13 @@ export default function FeedbacksIndex({ feedbacks, filters, books }) {
 
     return (
         <AppLayout>
-            <Head title="Book Reviews" />
+            <Head title="Avaliações de Livros" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="mb-8">
                         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-                            Book Reviews
+                            Avaliações de Livros
                         </h1>
 
                         {/* Filters */}
@@ -63,32 +63,32 @@ export default function FeedbacksIndex({ feedbacks, filters, books }) {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Rating
+                                        Avaliação
                                     </label>
                                     <select
                                         value={selectedRating}
                                         onChange={handleRatingChange}
                                         className="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm"
                                     >
-                                        <option value="">All Ratings</option>
-                                        <option value={5}>⭐⭐⭐⭐⭐ 5 Stars</option>
-                                        <option value={4}>⭐⭐⭐⭐ 4 Stars</option>
-                                        <option value={3}>⭐⭐⭐ 3 Stars</option>
-                                        <option value={2}>⭐⭐ 2 Stars</option>
-                                        <option value={1}>⭐ 1 Star</option>
+                                        <option value="">Todas as Avaliações</option>
+                                        <option value={5}>⭐⭐⭐⭐⭐ 5 Estrelas</option>
+                                        <option value={4}>⭐⭐⭐⭐ 4 Estrelas</option>
+                                        <option value={3}>⭐⭐⭐ 3 Estrelas</option>
+                                        <option value={2}>⭐⭐ 2 Estrelas</option>
+                                        <option value={1}>⭐ 1 Estrela</option>
                                     </select>
                                 </div>
 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Book
+                                        Livro
                                     </label>
                                     <select
                                         value={selectedBook}
                                         onChange={handleBookChange}
                                         className="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm"
                                     >
-                                        <option value="">All Books</option>
+                                        <option value="">Todos os Livros</option>
                                         {books.map((book) => (
                                             <option key={book.value} value={book.value}>
                                                 {book.label}
@@ -99,13 +99,13 @@ export default function FeedbacksIndex({ feedbacks, filters, books }) {
 
                                 <div className="flex items-end gap-2">
                                     <PrimaryButton onClick={applyFilters}>
-                                        Apply Filters
+                                        Aplicar Filtros
                                     </PrimaryButton>
                                     <button
                                         onClick={resetFilters}
                                         className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition duration-150"
                                     >
-                                        Reset
+                                        Limpar
                                     </button>
                                 </div>
                             </div>
@@ -113,7 +113,7 @@ export default function FeedbacksIndex({ feedbacks, filters, books }) {
 
                         {/* Stats */}
                         <div className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-                            {feedbacks.total} reviews found
+                            {feedbacks.total} avaliações encontradas
                         </div>
                     </div>
 
@@ -136,7 +136,7 @@ export default function FeedbacksIndex({ feedbacks, filters, books }) {
                                                     {feedback.book.title}
                                                 </Link>
                                                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                                    by {feedback.book.author}
+                                                    por {feedback.book.author}
                                                 </p>
                                             </div>
                                             <Link
@@ -191,7 +191,7 @@ export default function FeedbacksIndex({ feedbacks, filters, books }) {
                                                 href={route('books.show', feedback.book.id)}
                                                 className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300"
                                             >
-                                                View Book
+                                                Ver Livro
                                             </Link>
                                         </div>
                                     </div>
@@ -202,14 +202,14 @@ export default function FeedbacksIndex({ feedbacks, filters, books }) {
                         <div className="text-center py-12">
                             <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8">
                                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                                    No reviews found
+                                    Nenhuma avaliação encontrada
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                                    Try adjusting your filters or be the first to review a book!
+                                    Tente ajustar seus filtros ou seja o primeiro a avaliar um livro!
                                 </p>
                                 <Link href={route('books.index')}>
                                     <PrimaryButton>
-                                        Browse Books
+                                        Ver Livros
                                     </PrimaryButton>
                                 </Link>
                             </div>

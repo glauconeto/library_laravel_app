@@ -2,20 +2,23 @@ import React from 'react';
 import { Head } from '@inertiajs/react';
 import AppLayout from '../layouts/AppLayout';
 
-export default function Dashboard({ auth }) {
-    return (
-        <AppLayout user={auth.user}>
-            <Head title="Painel" />
+// Import the role-specific dashboard components
+import LibrarianDashboard from './Dashboard/Librarian';
+import UserDashboard from './Dashboard/User';
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
-                            Você está logado!
-                        </div>
-                    </div>
-                </div>
-            </div>
+export default function Dashboard({ auth, ...props }) {
+    const user = auth.user;
+    
+    // Check if user has librarian role
+    const isLibrarian = user.roles && user.roles.some(role => role.name === 'librarian');
+    
+    return (
+        <AppLayout user={user}>
+            {isLibrarian ? (
+                <LibrarianDashboard {...props} />
+            ) : (
+                <UserDashboard {...props} />
+            )}
         </AppLayout>
     );
 }

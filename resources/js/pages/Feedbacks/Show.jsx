@@ -22,7 +22,7 @@ export default function FeedbacksShow({ feedback }) {
     };
 
     const handleDelete = () => {
-        if (confirm('Are you sure you want to delete this review? This action cannot be undone.')) {
+        if (confirm('Tem certeza que deseja excluir esta avaliação? Esta ação não pode ser desfeita.')) {
             router.delete(route('feedbacks.destroy', feedback.id), {
                 onSuccess: () => {
                     router.visit(route('books.show', feedback.book.id));
@@ -33,7 +33,7 @@ export default function FeedbacksShow({ feedback }) {
 
     return (
         <AppLayout>
-            <Head title={`Review of ${feedback.book.title}`} />
+            <Head title={`Avaliação de ${feedback.book.title}`} />
 
             <div className="py-12">
                 <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
@@ -43,21 +43,21 @@ export default function FeedbacksShow({ feedback }) {
                             <div className="flex justify-between items-start mb-8">
                                 <div>
                                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                                        Book Review
+                                        Avaliação do Livro
                                     </h1>
                                     <p className="text-gray-600 dark:text-gray-400">
-                                        Review ID: #{feedback.id}
+                                        ID da Avaliação: #{feedback.id}
                                     </p>
                                 </div>
                                 <div className="flex gap-2">
                                     <PrimaryButton onClick={handleEdit}>
-                                        Edit Review
+                                        Editar Avaliação
                                     </PrimaryButton>
                                     <button
                                         onClick={handleDelete}
                                         className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-150"
                                     >
-                                        Delete
+                                        Excluir
                                     </button>
                                 </div>
                             </div>
@@ -65,12 +65,12 @@ export default function FeedbacksShow({ feedback }) {
                             {/* Book Information */}
                             <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-8">
                                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                                    📚 Book Information
+                                    📚 Informações do Livro
                                 </h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
-                                            Title
+                                            Título
                                         </span>
                                         <Link
                                             href={route('books.show', feedback.book.id)}
@@ -81,7 +81,7 @@ export default function FeedbacksShow({ feedback }) {
                                     </div>
                                     <div>
                                         <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
-                                            Author
+                                            Autor
                                         </span>
                                         <span className="text-gray-900 dark:text-white">
                                             {feedback.book.author}
@@ -89,7 +89,7 @@ export default function FeedbacksShow({ feedback }) {
                                     </div>
                                     <div>
                                         <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
-                                            Genre
+                                            Gênero
                                         </span>
                                         <span className="text-gray-900 dark:text-white">
                                             {feedback.book.genre}
@@ -97,7 +97,7 @@ export default function FeedbacksShow({ feedback }) {
                                     </div>
                                     <div>
                                         <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
-                                            Year
+                                            Ano
                                         </span>
                                         <span className="text-gray-900 dark:text-white">
                                             {feedback.book.year}
@@ -109,12 +109,12 @@ export default function FeedbacksShow({ feedback }) {
                             {/* Review Details */}
                             <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-8">
                                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                                    ⭐ Review Details
+                                    ⭐ Detalhes da Avaliação
                                 </h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
-                                            Rating
+                                            Avaliação
                                         </span>
                                         <div className="flex items-center mt-2">
                                             <div className="flex items-center mr-3">
@@ -127,7 +127,7 @@ export default function FeedbacksShow({ feedback }) {
                                     </div>
                                     <div>
                                         <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
-                                            Review Date
+                                            Data da Avaliação
                                         </span>
                                         <span className="text-gray-900 dark:text-white">
                                             {new Date(feedback.created_at).toLocaleDateString()}
@@ -138,7 +138,7 @@ export default function FeedbacksShow({ feedback }) {
                                 {feedback.comment && (
                                     <div className="mt-6">
                                         <span className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
-                                            Review Comment
+                                            Comentário da Avaliação
                                         </span>
                                         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
                                             <p className="text-gray-900 dark:text-white leading-relaxed">
@@ -152,7 +152,7 @@ export default function FeedbacksShow({ feedback }) {
                             {/* Reviewer Information */}
                             <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                                    👤 Reviewer Information
+                                    👤 Informações do Avaliador
                                 </h2>
                                 <div className="flex items-center space-x-4">
                                     <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
@@ -162,7 +162,7 @@ export default function FeedbacksShow({ feedback }) {
                                     </div>
                                     <div>
                                         <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
-                                            Name
+                                            Nome
                                         </span>
                                         <span className="text-gray-900 dark:text-white">
                                             {feedback.user.name}
@@ -181,18 +181,18 @@ export default function FeedbacksShow({ feedback }) {
                             <div className="flex justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700">
                                 <Link href={route('books.show', feedback.book.id)}>
                                     <PrimaryButton>
-                                        Back to Book
+                                        Voltar ao Livro
                                     </PrimaryButton>
                                 </Link>
                                 <div className="flex gap-2">
                                     <PrimaryButton onClick={handleEdit}>
-                                        Edit Review
+                                        Editar Avaliação
                                     </PrimaryButton>
                                     <button
                                         onClick={handleDelete}
                                         className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-150"
                                     >
-                                        Delete Review
+                                        Excluir Avaliação
                                     </button>
                                 </div>
                             </div>
