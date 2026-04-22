@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import AuthCard from '../../components/AuthCard';
-import AuthCardLogo from '../../components/AuthCardLogo';
-import Input from '../../components/Input';
-import InputError from '../../components/InputError';
-import InputLabel from '../../components/InputLabel';
-import PrimaryButton from '../../components/PrimaryButton';
-import Checkbox from '../../components/Checkbox';
+import AuthCard from '../../Components/AuthCard';
+import AuthCardLogo from '../../Components/AuthCardLogo';
+import Input from '../../Components/Input';
+import InputError from '../../Components/InputError';
+import InputLabel from '../../Components/InputLabel';
+import PrimaryButton from '../../Components/PrimaryButton';
+import Checkbox from '../../Components/Checkbox';
 
 export default function Register() {
     const { data, setData, post, processing, errors } = useForm({
