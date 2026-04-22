@@ -6,6 +6,7 @@ import PrimaryButton from '../../Components/PrimaryButton';
 export default function FeedbacksIndex({ feedbacks, filters, books }) {
     const [selectedRating, setSelectedRating] = useState(filters.rating || '');
     const [selectedBook, setSelectedBook] = useState(filters.book_id || '');
+    const [showFilters, setShowFilters] = useState(false);
 
     const handleRatingChange = (e) => {
         setSelectedRating(e.target.value);
@@ -59,8 +60,28 @@ export default function FeedbacksIndex({ feedbacks, filters, books }) {
                         </h1>
 
                         {/* Filters */}
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow mb-6">
+                            <button
+                                onClick={() => setShowFilters(!showFilters)}
+                                className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                            >
+                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Filtros
+                                </span>
+                                <svg
+                                    className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform ${
+                                        showFilters ? 'rotate-180' : ''
+                                    }`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            {showFilters && (
+                                <div className="px-6 pb-6 border-t border-gray-200 dark:border-gray-700">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         Avaliação
@@ -110,9 +131,11 @@ export default function FeedbacksIndex({ feedbacks, filters, books }) {
                                 </div>
                             </div>
                         </div>
+                    )}
+                </div>
 
-                        {/* Stats */}
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                {/* Stats */}
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-6">
                             {feedbacks.total} avaliações encontradas
                         </div>
                     </div>

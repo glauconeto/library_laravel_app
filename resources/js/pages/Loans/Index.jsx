@@ -5,6 +5,7 @@ import PrimaryButton from '../../Components/PrimaryButton';
 
 export default function LoansIndex({ loans, filters, isLibrarian }) {
     const [selectedStatus, setSelectedStatus] = useState(filters.status || '');
+    const [showFilters, setShowFilters] = useState(false);
 
     const handleStatusChange = (e) => {
         setSelectedStatus(e.target.value);
@@ -81,8 +82,28 @@ export default function LoansIndex({ loans, filters, isLibrarian }) {
                         </h1>
 
                         {/* Filters */}
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-                            <div className="flex flex-col sm:flex-row gap-4 items-end">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow mb-6">
+                            <button
+                                onClick={() => setShowFilters(!showFilters)}
+                                className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                            >
+                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Filtros
+                                </span>
+                                <svg
+                                    className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform ${
+                                        showFilters ? 'rotate-180' : ''
+                                    }`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            {showFilters && (
+                                <div className="px-6 pb-6 border-t border-gray-200 dark:border-gray-700">
+                                    <div className="flex flex-col sm:flex-row gap-4 items-end pt-4">
                                 <div className="flex-1 max-w-xs">
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         Filtro de Status
@@ -111,6 +132,8 @@ export default function LoansIndex({ loans, filters, isLibrarian }) {
                                     </button>
                                 </div>
                             </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Stats */}
