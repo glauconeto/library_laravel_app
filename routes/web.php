@@ -48,10 +48,34 @@ Route::get('/two-factor-challenge', function () {
     return Inertia::render('Auth/TwoFactorChallenge');
 })->middleware('auth')->name('two-factor.login');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard', [
-        'auth' => [
-            'user' => auth()->user(),
-        ],
-    ]);
-})->middleware('auth')->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
+
+// Book routes
+Route::resource('books', App\Http\Controllers\BookController::class)
+    ->middleware('auth');
+
+// Loan routes
+Route::resource('loans', App\Http\Controllers\LoanController::class)
+    ->middleware('auth');
+
+Route::post('/books/{book}/borrow', [App\Http\Controllers\LoanController::class, 'borrow'])
+    ->middleware('auth')
+    ->name('books.borrow');
+
+Route::post('/loans/{loan}/return', [App\Http\Controllers\LoanController::class, 'return'])
+    ->middleware('auth')
+    ->name('loans.return');
+
+Route::post('/loans/{loan}/extend', [App\Http\Controllers\LoanController::class, 'extend'])
+    ->middleware('auth')
+    ->name('loans.extend');
+
+// Feedback routes
+Route::resource('feedbacks', App\Http\Controllers\FeedbackController::class)
+    ->middleware('auth');
+
+Route::post('/books/{book}/feedback', [App\Http\Controllers\FeedbackController::class, 'store'])
+    ->middleware('auth')
+    ->name('books.feedback.store');
