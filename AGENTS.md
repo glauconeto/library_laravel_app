@@ -1,62 +1,62 @@
 # AGENTS.md
 
-## Objetivo
+## Objective
 
-Este repositório é um sistema de biblioteca em Laravel 12 com Inertia + React, Jetstream, Fortify, Sanctum e PostgreSQL.
+This repository is a library system built with Laravel 12, Inertia + React, Jetstream, Fortify, Sanctum, and PostgreSQL.
 
-O objetivo de quem atuar aqui, seja pessoa ou agente, é:
+The goal for anyone working here, whether human or agent, is:
 
-- manter a `main` estável;
-- trabalhar uma mudança por branch;
-- fazer commits pequenos e coerentes;
-- validar o comportamento antes de concluir;
-- evitar alterações acidentais de permissão, configuração local ou arquivos temporários.
+- keep `main` stable;
+- work on one change per branch;
+- make small, coherent commits;
+- validate behavior before completing;
+- avoid accidental permission changes, local config, or temporary files.
 
 ## Stack
 
 - Backend: PHP 8.2+, Laravel 12
 - Frontend: Inertia.js + React + Vite
 - Auth: Fortify + Jetstream + Sanctum
-- Permissões: Spatie Laravel Permission
-- Banco: PostgreSQL
-- Ambiente local preferencial: Laravel Sail / Docker Compose
+- Permissions: Spatie Laravel Permission
+- Database: PostgreSQL
+- Preferred local environment: Laravel Sail / Docker Compose
 
-## Estrutura importante
+## Important Structure
 
-- `app/` lógica da aplicação
-- `app/Actions/Fortify/` ações do fluxo de autenticação
-- `app/Providers/` providers de auth e bootstrap
-- `resources/js/` páginas, layouts e componentes React
-- `resources/views/` casca Blade do Inertia e views auxiliares
-- `routes/web.php` rotas web Inertia
-- `routes/api.php` rotas API
-- `routes/jetstream.php` rotas de recursos do Jetstream
-- `tests/` testes automatizados
+- `app/` application logic
+- `app/Actions/Fortify/` authentication flow actions
+- `app/Providers/` auth and bootstrap providers
+- `resources/js/` React pages, layouts, and components
+- `resources/views/` Inertia Blade shell and helper views
+- `routes/web.php` Inertia web routes
+- `routes/api.php` API routes
+- `routes/jetstream.php` Jetstream resource routes
+- `tests/` automated tests
 
-## Regras de trabalho
+## Work Rules
 
-1. Nunca trabalhar direto na `main` para features, refactors ou bugfixes.
-2. Criar uma branch por assunto.
-3. Executar uma etapa por vez.
-4. Ao concluir uma etapa, parar, revisar o resultado e só então seguir para a próxima.
-5. Evitar commits grandes com temas misturados.
-6. Não commitar `.env`, arquivos locais temporários ou lixo de editor.
-7. Não commitar `.codex` sem necessidade explícita.
-8. Não alterar permissão de arquivos PHP para executável.
-9. Manter `artisan` como executável.
-10. Antes de finalizar, revisar `git diff` e `git status`.
+1. Never work directly on `main` for features, refactors, or bugfixes.
+2. Create one branch per topic.
+3. Execute one step at a time.
+4. After completing a step, stop, review the result, then proceed to the next.
+5. Avoid large commits with mixed topics.
+6. Don't commit `.env`, local temporary files, or editor junk.
+7. Don't commit `.codex` without explicit need.
+8. Don't change PHP file permissions to executable.
+9. Keep `artisan` executable.
+10. Before finishing, review `git diff` and `git status`.
 
-## Convenção de branches
+## Branch Naming Convention
 
-Usar nomes curtos e claros:
+Use short, clear names:
 
-- `feat/<tema>`
-- `fix/<tema>`
-- `refactor/<tema>`
-- `test/<tema>`
-- `chore/<tema>`
+- `feat/<topic>`
+- `fix/<topic>`
+- `refactor/<topic>`
+- `test/<topic>`
+- `chore/<topic>`
 
-Exemplos:
+Examples:
 
 - `fix/auth-flow`
 - `fix/jetstream-delete-user`
@@ -64,9 +64,9 @@ Exemplos:
 - `test/auth-feature-tests`
 - `chore/file-permissions`
 
-## Convenção de commits
+## Commit Convention
 
-Preferir mensagens no padrão:
+Prefer messages in the format:
 
 - `feat: ...`
 - `fix: ...`
@@ -75,16 +75,16 @@ Preferir mensagens no padrão:
 - `docs: ...`
 - `chore: ...`
 
-Exemplos:
+Examples:
 
-- `feat: adiciona fluxo de empréstimos`
-- `fix: corrige redirecionamento após login`
-- `test: adiciona testes do fluxo de autenticação`
-- `chore: remove permissão de execução de arquivos PHP`
+- `feat: adds loans flow`
+- `fix: corrects redirect after login`
+- `test: adds auth flow tests`
+- `chore: removes execute permission from PHP files`
 
-## Fluxo recomendado
+## Recommended Workflow
 
-### Início de trabalho
+### Starting Work
 
 ```bash
 git switch main
@@ -92,17 +92,17 @@ git pull
 git switch -c fix/auth-flow
 ```
 
-### Durante o trabalho
+### During Work
 
 ```bash
 git status
 git diff
 git diff --staged
 git add -p
-git commit -m "fix: corrige fluxo de autenticação"
+git commit -m "fix: corrects auth flow"
 ```
 
-### Revisão antes de concluir
+### Review Before Completing
 
 ```bash
 git status
@@ -110,9 +110,9 @@ git log --oneline --decorate -n 10
 git diff main...HEAD
 ```
 
-## Comandos úteis do projeto
+## Useful Project Commands
 
-### Ambiente local com Composer/NPM
+### Local Environment with Composer/NPM
 
 ```bash
 composer install
@@ -123,7 +123,7 @@ composer test
 npm run build
 ```
 
-### Ambiente com Sail
+### Environment with Sail
 
 ```bash
 ./vendor/bin/sail up -d
@@ -132,72 +132,72 @@ npm run build
 ./vendor/bin/sail npm run build
 ```
 
-## Checklist de validação
+## Validation Checklist
 
-Antes de concluir uma branch, validar pelo menos o que foi afetado.
+Before completing a branch, validate at least what was affected.
 
-### Para mudanças de autenticação
+### For Auth Changes
 
-- registro
+- registration
 - login
 - logout
-- reset de senha
-- acesso a rota autenticada
-- redirecionamentos corretos
+- password reset
+- authenticated route access
+- correct redirects
 
-### Para mudanças de domínio
+### For Domain Changes
 
-- regra de negócio funcionando
-- relação entre models sem erro
-- rotas respondendo corretamente
-- feedback de erro adequado
+- business rule working
+- model relationships without errors
+- routes responding correctly
+- proper error feedback
 
-### Para mudanças de frontend
+### For Frontend Changes
 
-- página abre sem erro
-- navegação Inertia funciona
-- formulário envia corretamente
-- mensagens de erro aparecem
+- page opens without error
+- Inertia navigation works
+- form submits correctly
+- error messages appear
 
-## Cuidados específicos deste projeto
+## Project-Specific Cautions
 
 ### 1. Jetstream
 
-Se mexer em Jetstream, revisar:
+If modifying Jetstream, review:
 
 - `app/Providers/JetstreamServiceProvider.php`
 - `routes/jetstream.php`
-- recursos realmente habilitados em `config/jetstream.php`
+- features actually enabled in `config/jetstream.php`
 
-Não assumir que todo scaffold instalado está completo. Validar fluxo real.
+Don't assume installed scaffold is complete. Validate real flow.
 
-### 2. User e regras de empréstimo
+### 2. User and Loan Rules
 
-Se mexer no model `User`, revisar impacto em:
+If modifying the `User` model, review impact on:
 
-- autenticação
-- papéis/permissões
-- relação com empréstimos
-- regra `canBorrow()`
+- authentication
+- roles/permissions
+- loan relationships
+- `canBorrow()` rule
 
-### 3. Permissões de arquivo
+### 3. File Permissions
 
-Se aparecer `100755` em arquivos PHP comuns, corrigir antes de concluir:
+If `100755` appears on regular PHP files, fix before completing:
 
 ```bash
-chmod 644 caminho/do/arquivo.php
+chmod 644 path/to/file.php
 ```
 
-## O que um agente deve evitar
+## What an Agent Should Avoid
 
-- editar arquivos não relacionados ao objetivo da branch;
-- misturar refactor com feature no mesmo commit;
-- adicionar dependência sem necessidade clara;
-- mudar configuração de ambiente sem documentar;
-- reverter trabalho do usuário sem pedido explícito;
-- fazer commits automáticos sem revisão do diff.
+- editing files unrelated to the branch goal;
+- mixing refactor with feature in the same commit;
+- adding dependencies without clear need;
+- changing environment config without documenting;
+- reverting user work without explicit request;
+- making automatic commits without diff review.
 
-## Próximos trabalhos sugeridos
+## Suggested Next Work
 
 - `fix/auth-flow`
 - `fix/jetstream-delete-user`
@@ -206,12 +206,12 @@ chmod 644 caminho/do/arquivo.php
 - `feat/loans-flow`
 - `feat/user-roles-permissions`
 
-## Definição de pronto
+## Definition of Done
 
-Uma tarefa está pronta quando:
+A task is done when:
 
-- o escopo da branch está claro;
-- os arquivos alterados fazem sentido para aquele escopo;
-- os commits contam uma história coerente;
-- o comportamento foi validado;
-- não há mudanças acidentais sobrando no `git status`.
+- branch scope is clear;
+- changed files make sense for that scope;
+- commits tell a coherent story;
+- behavior was validated;
+- no accidental changes remain in `git status`.
