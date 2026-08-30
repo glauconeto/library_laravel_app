@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
-import AuthCard from '../../Components/AuthCard';
-import AuthCardLogo from '../../Components/AuthCardLogo';
-import Input from '../../Components/Input';
-import InputError from '../../Components/InputError';
-import InputLabel from '../../Components/InputLabel';
-import PrimaryButton from '../../Components/PrimaryButton';
+import AuthCard from '@/Components/AuthCard';
+import AuthCardLogo from '@/Components/AuthCardLogo';
+import Input from '@/Components/Input';
+import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/InputLabel';
+import PrimaryButton from '@/Components/PrimaryButton';
+
+interface TwoFactorFormData {
+    code: string;
+    recovery_code: string;
+}
 
 export default function TwoFactorChallenge() {
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm<TwoFactorFormData>({
         code: '',
         recovery_code: '',
     });
 
     const [useRecoveryCode, setUseRecoveryCode] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(route('two-factor.login'));
     };

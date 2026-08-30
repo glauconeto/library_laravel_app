@@ -1,18 +1,26 @@
 import React from 'react';
 import { Head, useForm } from '@inertiajs/react';
-import AuthCard from '../../Components/AuthCard';
-import AuthCardLogo from '../../Components/AuthCardLogo';
-import Input from '../../Components/Input';
-import InputError from '../../Components/InputError';
-import InputLabel from '../../Components/InputLabel';
-import PrimaryButton from '../../Components/PrimaryButton';
+import AuthCard from '@/Components/AuthCard';
+import AuthCardLogo from '@/Components/AuthCardLogo';
+import Input from '@/Components/Input';
+import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/InputLabel';
+import PrimaryButton from '@/Components/PrimaryButton';
 
-export default function ForgotPassword({ status }) {
-    const { data, setData, post, processing, errors } = useForm({
+interface ForgotPasswordFormData {
+    email: string;
+}
+
+interface ForgotPasswordProps {
+    status: string | null;
+}
+
+export default function ForgotPassword({ status }: ForgotPasswordProps) {
+    const { data, setData, post, processing, errors } = useForm<ForgotPasswordFormData>({
         email: '',
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(route('password.email'));
     };

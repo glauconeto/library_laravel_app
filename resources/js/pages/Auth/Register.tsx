@@ -1,22 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import AuthCard from '../../Components/AuthCard';
-import AuthCardLogo from '../../Components/AuthCardLogo';
-import Input from '../../Components/Input';
-import InputError from '../../Components/InputError';
-import InputLabel from '../../Components/InputLabel';
-import PrimaryButton from '../../Components/PrimaryButton';
-import Checkbox from '../../Components/Checkbox';
+import AuthCard from '@/Components/AuthCard';
+import AuthCardLogo from '@/Components/AuthCardLogo';
+import Input from '@/Components/Input';
+import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/InputLabel';
+import PrimaryButton from '@/Components/PrimaryButton';
+import Checkbox from '@/Components/Checkbox';
+
+interface RegisterFormData {
+    name: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+}
 
 export default function Register() {
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm<RegisterFormData>({
         name: '',
         email: '',
         password: '',
         password_confirmation: '',
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(route('register'));
     };

@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import AuthCard from '../../Components/AuthCard';
-import AuthCardLogo from '../../Components/AuthCardLogo';
-import Input from '../../Components/Input';
-import InputError from '../../Components/InputError';
-import InputLabel from '../../Components/InputLabel';
-import PrimaryButton from '../../Components/PrimaryButton';
-import Checkbox from '../../Components/Checkbox';
+import AuthCard from '@/Components/AuthCard';
+import AuthCardLogo from '@/Components/AuthCardLogo';
+import Input from '@/Components/Input';
+import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/InputLabel';
+import PrimaryButton from '@/Components/PrimaryButton';
+import Checkbox from '@/Components/Checkbox';
 
-export default function Login({ canResetPassword, status }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+interface LoginFormData {
+    email: string;
+    password: string;
+    remember: boolean;
+}
+
+interface LoginProps {
+    canResetPassword: boolean;
+    status: string | null;
+}
+
+export default function Login({ canResetPassword, status }: LoginProps) {
+    const { data, setData, post, processing, errors, reset } = useForm<LoginFormData>({
         email: '',
         password: '',
         remember: false,
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(route('login'), {
             onFinish: () => reset('password'),

@@ -1,13 +1,17 @@
 import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import AuthCard from '../../Components/AuthCard';
-import AuthCardLogo from '../../Components/AuthCardLogo';
-import PrimaryButton from '../../Components/PrimaryButton';
+import AuthCard from '@/Components/AuthCard';
+import AuthCardLogo from '@/Components/AuthCardLogo';
+import PrimaryButton from '@/Components/PrimaryButton';
 
-export default function VerifyEmail({ status }) {
+interface VerifyEmailProps {
+    status: string | null;
+}
+
+export default function VerifyEmail({ status }: VerifyEmailProps) {
     const { post, processing } = useForm({});
 
-    const submit = (e) => {
+    const submit = (e: React.FormEvent) => {
         e.preventDefault();
         post(route('verification.send'));
     };
