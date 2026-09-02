@@ -67,11 +67,12 @@ export interface PaginatedData<T> {
     to: number | null;
 }
 
-export interface PageProps extends Record<string, unknown> {
+export interface PageProps {
+    [key: string]: unknown;
     auth: {
         user: User;
     };
-    flash: {
+    flash?: {
         success?: string;
         error?: string;
     };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
 import { PageProps } from '@/Types';
 
