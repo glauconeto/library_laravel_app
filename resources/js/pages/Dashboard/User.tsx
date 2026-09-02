@@ -1,9 +1,27 @@
-import React from 'react';
-import { Head, Link } from '@inertiajs/react';
-import AppLayout from '../../layouts/AppLayout';
-import PrimaryButton from '../../Components/PrimaryButton';
 
-export default function UserDashboard({ stats, activeLoans, recentFeedbacks, availableBooks }) {
+import { Head, Link } from '@inertiajs/react';
+import AppLayout from '@/layouts/AppLayout';
+import PrimaryButton from '@/Components/PrimaryButton';
+import { Book, Loan, Feedback } from '@/Types';
+
+declare const route: (name: string, params?: unknown) => string;
+
+interface UserStats {
+    active_loans: number;
+    total_loans: number;
+    feedbacks_given: number;
+    can_borrow: boolean;
+    max_loans?: number;
+}
+
+interface UserDashboardProps {
+    stats: UserStats;
+    activeLoans: Loan[];
+    recentFeedbacks: Feedback[];
+    availableBooks: Book[];
+}
+
+export default function UserDashboard({ stats, activeLoans, recentFeedbacks, availableBooks }: UserDashboardProps) {
     return (
         <AppLayout>
             <Head title="Meu Painel" />

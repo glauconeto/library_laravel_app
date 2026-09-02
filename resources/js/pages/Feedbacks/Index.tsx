@@ -1,24 +1,41 @@
-import React, { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '../../layouts/AppLayout';
-import PrimaryButton from '../../Components/PrimaryButton';
+import AppLayout from '@/layouts/AppLayout';
+import PrimaryButton from '@/Components/PrimaryButton';
+import { Feedback, PaginatedData } from '@/Types';
 
-export default function FeedbacksIndex({ feedbacks, filters, books }) {
-    const [selectedRating, setSelectedRating] = useState(filters.rating || '');
-    const [selectedBook, setSelectedBook] = useState(filters.book_id || '');
-    const [showFilters, setShowFilters] = useState(false);
+declare const route: (name: string, params?: unknown) => string;
 
-    const handleRatingChange = (e) => {
+interface BookOption {
+    value: number;
+    label: string;
+}
+
+interface FeedbacksIndexProps {
+    feedbacks: PaginatedData<Feedback>;
+    filters: {
+        rating?: string;
+        book_id?: string;
+    };
+    books: BookOption[];
+}
+
+export default function FeedbacksIndex({ feedbacks, filters, books }: FeedbacksIndexProps) {
+    const [selectedRating, setSelectedRating] = useState<string>(filters.rating || '');
+    const [selectedBook, setSelectedBook] = useState<string>(filters.book_id || '');
+    const [showFilters, setShowFilters] = useState<boolean>(false);
+
+    const handleRatingChange = (e: ChangeEvent<HTMLSelectElement>) => {
         setSelectedRating(e.target.value);
     };
 
-    const handleBookChange = (e) => {
+    const handleBookChange = (e: ChangeEvent<HTMLSelectElement>) => {
         setSelectedBook(e.target.value);
     };
 
     const applyFilters = () => {
         const params = new URLSearchParams();
-        
+
         if (selectedRating) {
             params.append('rating', selectedRating);
         }
@@ -26,7 +43,7 @@ export default function FeedbacksIndex({ feedbacks, filters, books }) {
             params.append('book_id', selectedBook);
         }
 
-        router.get(route('feedbacks.index'), params.toString());
+        router.get(route('feedbacks.index'), Object.fromEntries(params.entries()));
     };
 
     const resetFilters = () => {
@@ -35,7 +52,7 @@ export default function FeedbacksIndex({ feedbacks, filters, books }) {
         router.get(route('feedbacks.index'));
     };
 
-    const getStars = (rating) => {
+    const getStars = (rating: number) => {
         return Array.from({ length: 5 }, (_, i) => (
             <span
                 key={i}

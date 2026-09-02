@@ -1,11 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '../../layouts/AppLayout';
-import Input from '../../Components/Input';
-import PrimaryButton from '../../Components/PrimaryButton';
+import AppLayout from '@/layouts/AppLayout';
+import Input from '@/Components/Input';
+import PrimaryButton from '@/Components/PrimaryButton';
+import { Book } from '@/Types';
 
-export default function BooksEdit({ book, genres }) {
-    const [data, setData] = useState({
+declare const route: (name: string, params?: unknown) => string;
+
+interface BookFormData {
+    title: string;
+    author: string;
+    genre: string;
+    year: number;
+    isbn: string;
+    stock: number;
+    description: string;
+}
+
+interface BooksEditProps {
+    book: Book;
+    genres: string[];
+}
+
+export default function BooksEdit({ book, genres }: BooksEditProps) {
+    const [data, setData] = useState<BookFormData>({
         title: book.title || '',
         author: book.author || '',
         genre: book.genre || '',
@@ -15,41 +33,41 @@ export default function BooksEdit({ book, genres }) {
         description: book.description || '',
     });
 
-    const [errors, setErrors] = useState({});
-    const [processing, setProcessing] = useState(false);
+    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [processing, setProcessing] = useState<boolean>(false);
 
-    const handleChange = (e) => {
-        const { name, value, type } = e.target;
-        
-        setData(prev => ({
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value, type } = e.target as HTMLInputElement;
+
+        setData((prev) => ({
             ...prev,
-            [name]: type === 'number' ? parseInt(value) || 0 : value
+            [name]: type === 'number' ? parseInt(value) || 0 : value,
         }));
-        
+
         // Clear error for this field when user starts typing
         if (errors[name]) {
-            setErrors(prev => ({
+            setErrors((prev) => ({
                 ...prev,
-                [name]: ''
+                [name]: '',
             }));
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         setProcessing(true);
-        
-        router.put(route('books.update', book.id), data, {
+
+        router.put(route('books.update', book.id), data as unknown as never, {
             onSuccess: () => {
                 router.visit(route('books.show', book.id));
             },
-            onError: (errors) => {
-                setErrors(errors);
+            onError: (errs) => {
+                setErrors(errs as Record<string, string>);
                 setProcessing(false);
             },
             onFinish: () => {
                 setProcessing(false);
-            }
+            },
         });
     };
 
@@ -58,7 +76,7 @@ export default function BooksEdit({ book, genres }) {
             router.delete(route('books.destroy', book.id), {
                 onSuccess: () => {
                     router.visit(route('books.index'));
-                }
+                },
             });
         }
     };

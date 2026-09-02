@@ -1,24 +1,35 @@
-import React, { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '../../layouts/AppLayout';
-import PrimaryButton from '../../Components/PrimaryButton';
+import AppLayout from '@/layouts/AppLayout';
+import PrimaryButton from '@/Components/PrimaryButton';
+import { Loan, PaginatedData } from '@/Types';
 
-export default function LoansIndex({ loans, filters, isLibrarian }) {
-    const [selectedStatus, setSelectedStatus] = useState(filters.status || '');
-    const [showFilters, setShowFilters] = useState(false);
+declare const route: (name: string, params?: unknown) => string;
 
-    const handleStatusChange = (e) => {
+interface LoansIndexProps {
+    loans: PaginatedData<Loan>;
+    filters: {
+        status?: string;
+    };
+    isLibrarian: boolean;
+}
+
+export default function LoansIndex({ loans, filters, isLibrarian }: LoansIndexProps) {
+    const [selectedStatus, setSelectedStatus] = useState<string>(filters.status || '');
+    const [showFilters, setShowFilters] = useState<boolean>(false);
+
+    const handleStatusChange = (e: ChangeEvent<HTMLSelectElement>) => {
         setSelectedStatus(e.target.value);
     };
 
     const applyFilter = () => {
         const params = new URLSearchParams();
-        
+
         if (selectedStatus) {
             params.append('status', selectedStatus);
         }
 
-        router.get(route('loans.index', params.toString()));
+        router.get(route('loans.index'), Object.fromEntries(params.entries()));
     };
 
     const resetFilter = () => {
@@ -26,19 +37,19 @@ export default function LoansIndex({ loans, filters, isLibrarian }) {
         router.get(route('loans.index'));
     };
 
-    const handleReturn = (loanId) => {
+    const handleReturn = (loanId: number) => {
         if (confirm('Tem certeza que deseja marcar este livro como devolvido?')) {
             router.post(route('loans.return', loanId));
         }
     };
 
-    const handleExtend = (loanId) => {
+    const handleExtend = (loanId: number) => {
         if (confirm('Deseja estender este empréstimo por 7 dias?')) {
             router.post(route('loans.extend', loanId));
         }
     };
 
-    const getStatusColor = (status) => {
+    const getStatusColor = (status: string) => {
         switch (status) {
             case 'active':
                 return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
@@ -51,10 +62,10 @@ export default function LoansIndex({ loans, filters, isLibrarian }) {
         }
     };
 
-    const getDaysText = (loan) => {
+    const getDaysText = (loan: Loan) => {
         const today = new Date();
         const dueDate = new Date(loan.due_date);
-        const diffTime = dueDate - today;
+        const diffTime = dueDate.getTime() - today.getTime();
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
         if (loan.returned_at) {
@@ -252,7 +263,7 @@ export default function LoansIndex({ loans, filters, isLibrarian }) {
                                     Nenhum empréstimo encontrado
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                                    {isLibrarian 
+                                    {isLibrarian
                                         ? 'Nenhum empréstimo corresponde ao seu filtro atual.'
                                         : 'Você não pegou nenhum livro emprestado ainda. Comece explorando nossa coleção!'
                                     }

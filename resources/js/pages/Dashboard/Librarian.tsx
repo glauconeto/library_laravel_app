@@ -1,9 +1,29 @@
-import React from 'react';
-import { Head, Link } from '@inertiajs/react';
-import AppLayout from '../../layouts/AppLayout';
-import PrimaryButton from '../../Components/PrimaryButton';
 
-export default function LibrarianDashboard({ stats, recentBooks, recentLoans, overdueLoans, popularBooks }) {
+import { Head, Link } from '@inertiajs/react';
+import AppLayout from '@/layouts/AppLayout';
+import PrimaryButton from '@/Components/PrimaryButton';
+import { Book, Loan } from '@/Types';
+
+declare const route: (name: string, params?: unknown) => string;
+
+interface LibrarianStats {
+    total_books: number;
+    total_users: number;
+    active_loans: number;
+    overdue_loans: number;
+    total_feedbacks: number;
+    average_rating: number | string;
+}
+
+interface LibrarianDashboardProps {
+    stats: LibrarianStats;
+    recentBooks: Book[];
+    recentLoans: Loan[];
+    overdueLoans: Loan[];
+    popularBooks: (Book & { loans_count: number })[];
+}
+
+export default function LibrarianDashboard({ stats, recentBooks, overdueLoans, popularBooks }: LibrarianDashboardProps) {
     return (
         <AppLayout>
             <Head title="Painel do Bibliotecário" />

@@ -1,32 +1,45 @@
-import React, { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '../../layouts/AppLayout';
-import PrimaryButton from '../../Components/PrimaryButton';
+import AppLayout from '@/layouts/AppLayout';
+import PrimaryButton from '@/Components/PrimaryButton';
+import { Book, Feedback, Loan } from '@/Types';
 
-export default function BooksShow({ book, averageRating, canBorrow }) {
-    const [showFeedbackForm, setShowFeedbackForm] = useState(false);
-    const [rating, setRating] = useState(5);
-    const [comment, setComment] = useState('');
+declare const route: (name: string, params?: unknown) => string;
+
+interface BooksShowProps {
+    book: Book & {
+        loans?: Loan[];
+        feedbacks?: Feedback[];
+        feedbacks_count?: number;
+    };
+    averageRating: number;
+    canBorrow: boolean;
+}
+
+export default function BooksShow({ book, averageRating, canBorrow }: BooksShowProps) {
+    const [showFeedbackForm, setShowFeedbackForm] = useState<boolean>(false);
+    const [rating, setRating] = useState<number>(5);
+    const [comment, setComment] = useState<string>('');
 
     const handleBorrow = () => {
         router.post(route('books.borrow', book.id));
     };
 
-    const handleFeedbackSubmit = (e) => {
+    const handleFeedbackSubmit = (e: FormEvent) => {
         e.preventDefault();
-        
-        const formData = new FormData();
-        formData.append('rating', rating);
-        formData.append('comment', comment);
 
-        router.post(route('books.feedback.store', book.id), formData, {
-            onSuccess: () => {
-                setShowFeedbackForm(false);
-                setRating(5);
-                setComment('');
-                router.reload();
+        router.post(
+            route('books.feedback.store', book.id),
+            { rating, comment },
+            {
+                onSuccess: () => {
+                    setShowFeedbackForm(false);
+                    setRating(5);
+                    setComment('');
+                    router.reload();
+                },
             },
-        });
+        );
     };
 
     return (
@@ -258,7 +271,7 @@ export default function BooksShow({ book, averageRating, canBorrow }) {
                                     </label>
                                     <select
                                         value={rating}
-                                        onChange={(e) => setRating(e.target.value)}
+                                        onChange={(e: ChangeEvent<HTMLSelectElement>) => setRating(Number(e.target.value))}
                                         className="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm"
                                     >
                                         <option value={5}>⭐⭐⭐⭐⭐⭐ Excelente</option>
@@ -275,7 +288,7 @@ export default function BooksShow({ book, averageRating, canBorrow }) {
                                     </label>
                                     <textarea
                                         value={comment}
-                                        onChange={(e) => setComment(e.target.value)}
+                                        onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
                                         rows={4}
                                         className="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm"
                                         placeholder="Compartilhe seus pensamentos sobre este livro..."

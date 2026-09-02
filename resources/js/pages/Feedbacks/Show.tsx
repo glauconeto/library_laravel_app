@@ -1,10 +1,17 @@
-import React from 'react';
-import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '../../layouts/AppLayout';
-import PrimaryButton from '../../Components/PrimaryButton';
 
-export default function FeedbacksShow({ feedback }) {
-    const getStars = (rating) => {
+import { Head, Link, router } from '@inertiajs/react';
+import AppLayout from '@/layouts/AppLayout';
+import PrimaryButton from '@/Components/PrimaryButton';
+import { Feedback } from '@/Types';
+
+declare const route: (name: string, params?: unknown) => string;
+
+interface FeedbacksShowProps {
+    feedback: Feedback;
+}
+
+export default function FeedbacksShow({ feedback }: FeedbacksShowProps) {
+    const getStars = (rating: number) => {
         return Array.from({ length: 5 }, (_, i) => (
             <span
                 key={i}
@@ -26,7 +33,7 @@ export default function FeedbacksShow({ feedback }) {
             router.delete(route('feedbacks.destroy', feedback.id), {
                 onSuccess: () => {
                     router.visit(route('books.show', feedback.book.id));
-                }
+                },
             });
         }
     };

@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '../../layouts/AppLayout';
-import Input from '../../Components/Input';
-import PrimaryButton from '../../Components/PrimaryButton';
+import AppLayout from '@/layouts/AppLayout';
+import Input from '@/Components/Input';
+import PrimaryButton from '@/Components/PrimaryButton';
 
-export default function BooksCreate({ genres }) {
-    const [data, setData] = useState({
+declare const route: (name: string, params?: unknown) => string;
+
+interface BookFormData {
+    title: string;
+    author: string;
+    genre: string;
+    year: number;
+    isbn: string;
+    stock: number;
+    description: string;
+}
+
+interface BooksCreateProps {
+    genres: string[];
+}
+
+export default function BooksCreate({ genres }: BooksCreateProps) {
+    const [data, setData] = useState<BookFormData>({
         title: '',
         author: '',
         genre: '',
@@ -15,41 +31,41 @@ export default function BooksCreate({ genres }) {
         description: '',
     });
 
-    const [errors, setErrors] = useState({});
-    const [processing, setProcessing] = useState(false);
+    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [processing, setProcessing] = useState<boolean>(false);
 
-    const handleChange = (e) => {
-        const { name, value, type } = e.target;
-        
-        setData(prev => ({
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value, type } = e.target as HTMLInputElement;
+
+        setData((prev) => ({
             ...prev,
-            [name]: type === 'number' ? parseInt(value) || 0 : value
+            [name]: type === 'number' ? parseInt(value) || 0 : value,
         }));
-        
+
         // Clear error for this field when user starts typing
         if (errors[name]) {
-            setErrors(prev => ({
+            setErrors((prev) => ({
                 ...prev,
-                [name]: ''
+                [name]: '',
             }));
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         setProcessing(true);
-        
-        router.post(route('books.store'), data, {
+
+        router.post(route('books.store'), data as unknown as never, {
             onSuccess: () => {
                 router.visit(route('books.index'));
             },
-            onError: (errors) => {
-                setErrors(errors);
+            onError: (errs) => {
+                setErrors(errs as Record<string, string>);
                 setProcessing(false);
             },
             onFinish: () => {
                 setProcessing(false);
-            }
+            },
         });
     };
 

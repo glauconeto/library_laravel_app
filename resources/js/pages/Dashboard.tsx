@@ -1,5 +1,3 @@
-import React from 'react';
-import { Head } from '@inertiajs/react';
 import AppLayout from '@/layouts/AppLayout';
 import LibrarianDashboard from './Dashboard/Librarian';
 import UserDashboard from './Dashboard/User';
@@ -9,6 +7,8 @@ interface DashboardProps {
     auth: {
         user: User;
     };
+    // passthrough props for either dashboard variant
+    [key: string]: unknown;
 }
 
 export default function Dashboard({ auth, ...props }: DashboardProps) {
@@ -20,9 +20,9 @@ export default function Dashboard({ auth, ...props }: DashboardProps) {
     return (
         <AppLayout user={user}>
             {isLibrarian ? (
-                <LibrarianDashboard {...props} />
+                <LibrarianDashboard {...(props as unknown as React.ComponentProps<typeof LibrarianDashboard>)} />
             ) : (
-                <UserDashboard {...props} />
+                <UserDashboard {...(props as unknown as React.ComponentProps<typeof UserDashboard>)} />
             )}
         </AppLayout>
     );

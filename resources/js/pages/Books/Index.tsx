@@ -1,35 +1,50 @@
-import React, { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '../../layouts/AppLayout';
-import Input from '../../Components/Input';
-import PrimaryButton from '../../Components/PrimaryButton';
+import AppLayout from '@/layouts/AppLayout';
+import Input from '@/Components/Input';
+import PrimaryButton from '@/Components/PrimaryButton';
+import { Book, PaginatedData } from '@/Types';
 
-export default function BooksIndex({ books, filters, genres }) {
-    const [search, setSearch] = useState(filters.search || '');
-    const [selectedGenre, setSelectedGenre] = useState(filters.genre || '');
-    const [availableOnly, setAvailableOnly] = useState(filters.available === 'true');
-    const [showFilters, setShowFilters] = useState(false);
+declare const route: (name: string, params?: unknown) => string;
 
-    const handleSearch = (e) => {
+interface Filters {
+    search?: string;
+    genre?: string;
+    available?: string;
+}
+
+interface BooksIndexProps {
+    books: PaginatedData<Book>;
+    filters: Filters;
+    genres: string[];
+}
+
+export default function BooksIndex({ books, filters, genres }: BooksIndexProps) {
+    const [search, setSearch] = useState<string>(filters.search || '');
+    const [selectedGenre, setSelectedGenre] = useState<string>(filters.genre || '');
+    const [availableOnly, setAvailableOnly] = useState<boolean>(filters.available === 'true');
+    const [showFilters, setShowFilters] = useState<boolean>(false);
+
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
     };
 
-    const handleGenreChange = (e) => {
+    const handleGenreChange = (e: ChangeEvent<HTMLSelectElement>) => {
         setSelectedGenre(e.target.value);
     };
 
-    const handleAvailableChange = (e) => {
+    const handleAvailableChange = (e: ChangeEvent<HTMLInputElement>) => {
         setAvailableOnly(e.target.checked);
     };
 
     const applyFilters = () => {
         const params = new URLSearchParams();
-        
+
         if (search) params.append('search', search);
         if (selectedGenre) params.append('genre', selectedGenre);
         if (availableOnly) params.append('available', 'true');
 
-        router.get(route('books.index'), params.toString());
+        router.get(route('books.index'), Object.fromEntries(params.entries()));
     };
 
     const resetFilters = () => {
