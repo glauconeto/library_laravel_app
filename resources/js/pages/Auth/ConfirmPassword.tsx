@@ -6,6 +6,7 @@ import Input from '@/Components/Input';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
+import { route } from 'ziggy-js';
 
 interface ConfirmPasswordFormData {
     password: string;
@@ -31,7 +32,7 @@ export default function ConfirmPassword() {
 
             <form onSubmit={handleSubmit}>
                 <div>
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="Password" children={undefined} />
                     <Input
                         id="password"
                         type="password"
