@@ -27,10 +27,17 @@ class FeedbackPolicy
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can create a feedback for the given book.
+     *
+     * Without a book context (e.g. the generic feedbacks resource), creation
+     * is never allowed: feedback is always book-scoped.
      */
-    public function create(User $user, Book $book): bool
+    public function create(User $user, ?Book $book = null): bool
     {
+        if ($book === null) {
+            return false;
+        }
+
         if ($user->can('manage books')) {
             return true;
         }

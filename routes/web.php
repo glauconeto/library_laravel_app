@@ -69,6 +69,7 @@ Route::post('/loans/{loan}/extend', [App\Http\Controllers\LoanController::class,
 
 // Feedback routes
 Route::resource('feedbacks', App\Http\Controllers\FeedbackController::class)
+    ->only(['index', 'show', 'edit', 'update', 'destroy'])
     ->middleware('auth');
 
 Route::post('/books/{book}/feedback', [App\Http\Controllers\FeedbackController::class, 'store'])

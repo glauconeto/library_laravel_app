@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use Database\Seeders\PermissionsSeeder;
+use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -17,5 +19,12 @@ abstract class TestCase extends BaseTestCase
         $_SERVER['DB_DATABASE'] = 'testing';
 
         parent::setUp();
+
+        // Seed the roles/permissions every test relies on (RefreshDatabase
+        // recreates the scheme, so the Spatie tables start empty).
+        $this->seed([
+            PermissionsSeeder::class,
+            RolesSeeder::class,
+        ]);
     }
 }

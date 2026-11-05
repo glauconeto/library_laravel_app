@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\Book;
 use App\Models\Loan;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -27,21 +26,14 @@ class LoanPolicy
 
     /**
      * Determine whether the user can create models.
+     *
+     * Mirrors User::canBorrow(): any user can create loans while under the
+     * active-loans limit (availability and duplicate checks stay with the
+     * controller).
      */
-    public function create(User $user, Book $book): bool
+    public function create(User $user): bool
     {
-        if (!$user->can('borrow books')) {
-            return false;
-        }
-
-        if (!$book->isAvailableForLoan()) {
-            return false;
-        }
-
-        return !Loan::where('user_id', $user->id)
-                   ->where('book_id', $book->id)
-                   ->whereNull('returned_at')
-                   ->exists();
+        return $user->activeLoans()->count() < 3;
     }
 
     /**

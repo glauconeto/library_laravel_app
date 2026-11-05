@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Feedback;
-use App\Models\Loan;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -12,15 +11,13 @@ use Inertia\Response;
 
 class FeedbackController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Feedback::class, 'feedback');
-    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request): Response
     {
+        $this->authorize('viewAny', Feedback::class);
+
         $feedbacks = Feedback::query()
             ->with(['user', 'book'])
             ->when($request->rating, function ($query, $rating) {
@@ -64,12 +61,7 @@ class FeedbackController extends Controller
             return back()->with('error', 'Você já avaliou este livro.');
         }
 
-        $hasReturnedLoan = Loan::where('user_id', $user->id)
-                           ->where('book_id', $book->id)
-                           ->whereNotNull('returned_at')
-                           ->exists();
-
-        if (!$hasReturnedLoan && !$user->can('manage books')) {
+        if (! $user->can('create', [Feedback::class, $book])) {
             return back()->with('error', 'Você só pode avaliar livros que pegou emprestado e devolveu.');
         }
 
@@ -94,6 +86,8 @@ class FeedbackController extends Controller
      */
     public function show(Feedback $feedback): Response
     {
+        $this->authorize('view', $feedback);
+
         $feedback->load(['user', 'book']);
 
         return Inertia::render('Feedbacks/Show', [
@@ -106,6 +100,8 @@ class FeedbackController extends Controller
      */
     public function edit(Feedback $feedback): Response
     {
+        $this->authorize('update', $feedback);
+
         return Inertia::render('Feedbacks/Edit', [
             'feedback' => $feedback,
         ]);
@@ -116,6 +112,8 @@ class FeedbackController extends Controller
      */
     public function update(Request $request, Feedback $feedback): RedirectResponse
     {
+        $this->authorize('update', $feedback);
+
         $validated = $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
@@ -132,6 +130,8 @@ class FeedbackController extends Controller
      */
     public function destroy(Feedback $feedback): RedirectResponse
     {
+        $this->authorize('delete', $feedback);
+
         $book = $feedback->book;
         $feedback->delete();
 

@@ -5,24 +5,11 @@ namespace Tests\Feature;
 use App\Models\Book;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
 
 class BookTest extends TestCase
 {
     use RefreshDatabase;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        // Register permissions for testing
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class);
-        
-        // Create roles if they don't exist
-        if (!\Spatie\Permission\Models\Role::where('name', 'librarian')->exists()) {
-            \Spatie\Permission\Models\Role::create(['name' => 'librarian']);
-        }
-    }
 
     /**
      * Test book index page access.

@@ -7,24 +7,11 @@ use App\Models\Feedback;
 use App\Models\Loan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
 
 class FeedbackTest extends TestCase
 {
     use RefreshDatabase;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        // Register permissions for testing
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class);
-        
-        // Create roles if they don't exist
-        if (!\Spatie\Permission\Models\Role::where('name', 'librarian')->exists()) {
-            \Spatie\Permission\Models\Role::create(['name' => 'librarian']);
-        }
-    }
 
     /**
      * Test librarian can view all feedbacks.

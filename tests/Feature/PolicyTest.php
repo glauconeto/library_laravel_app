@@ -10,24 +10,11 @@ use App\Policies\BookPolicy;
 use App\Policies\FeedbackPolicy;
 use App\Policies\LoanPolicy;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
 
 class PolicyTest extends TestCase
 {
     use RefreshDatabase;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        // Register permissions for testing
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class);
-        
-        // Create roles if they don't exist
-        if (!\Spatie\Permission\Models\Role::where('name', 'librarian')->exists()) {
-            \Spatie\Permission\Models\Role::create(['name' => 'librarian']);
-        }
-    }
 
     /**
      * Test BookPolicy viewAny.
@@ -348,15 +335,15 @@ class PolicyTest extends TestCase
     }
 
     /**
-     * Test FeedbackPolicy create - always false.
-     * Note: Feedback creation logic is handled in the controller, not the policy.
+     * Test FeedbackPolicy create - user who never returned the book cannot create.
      */
-    public function test_feedback_policy_create_always_false(): void
+    public function test_feedback_policy_create_without_returned_loan_is_false(): void
     {
         $user = User::factory()->create();
+        $book = Book::factory()->create();
         $policy = new FeedbackPolicy();
 
-        $this->assertFalse($policy->create($user));
+        $this->assertFalse($policy->create($user, $book));
 
         $user->assignRole('librarian');
         $this->assertFalse($policy->create($user));
