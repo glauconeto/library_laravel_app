@@ -56,12 +56,12 @@ class FeedbackController extends Controller
             return back()->with('error', 'Você já avaliou este livro.');
         }
 
-        $hasActiveLoan = Loan::where('user_id', $user->id)
+        $hasReturnedLoan = Loan::where('user_id', $user->id)
                            ->where('book_id', $book->id)
                            ->whereNotNull('returned_at')
                            ->exists();
 
-        if (!$hasActiveLoan && !$user->hasRole('librarian')) {
+        if (!$hasReturnedLoan && !$user->hasRole('librarian')) {
             return back()->with('error', 'Você só pode avaliar livros que pegou emprestado e devolveu.');
         }
 

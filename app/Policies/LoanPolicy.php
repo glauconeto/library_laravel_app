@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Book;
 use App\Models\Loan;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -27,9 +28,20 @@ class LoanPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Book $book): bool
     {
-        return $user->canBorrow();
+        if (!$user->canBorrow()) {
+            return false;
+        }
+
+        if (!$book->isAvailableForLoan()) {
+            return false;
+        }
+
+        return !Loan::where('user_id', $user->id)
+                   ->where('book_id', $book->id)
+                   ->whereNull('returned_at')
+                   ->exists();
     }
 
     /**

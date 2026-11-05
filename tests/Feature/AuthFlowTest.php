@@ -55,7 +55,7 @@ class AuthFlowTest extends TestCase
 
         $response = $this->post('/logout');
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect('/');
         $this->assertGuest();
     }
 
@@ -73,7 +73,7 @@ class AuthFlowTest extends TestCase
             'email' => 'reset@example.com',
         ]);
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect('/');
     }
 
     /**

@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+Route::redirect('/', '/login');
+
 Route::get('/login', function () {
     return Inertia::render('Auth/Login', [
         'canResetPassword' => true,

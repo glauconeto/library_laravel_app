@@ -2,7 +2,9 @@
 
 namespace App\Policies;
 
+use App\Models\Book;
 use App\Models\Feedback;
+use App\Models\Loan;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -27,9 +29,16 @@ class FeedbackPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Book $book): bool
     {
-        return false;
+        if ($user->hasRole('librarian')) {
+            return true;
+        }
+
+        return Loan::where('user_id', $user->id)
+                   ->where('book_id', $book->id)
+                   ->whereNotNull('returned_at')
+                   ->exists();
     }
 
     /**
