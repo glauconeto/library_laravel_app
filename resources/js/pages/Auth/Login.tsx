@@ -1,7 +1,6 @@
 import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AuthCard from '@/Components/AuthCard';
-import AuthCardLogo from '@/Components/AuthCardLogo';
 import Input from '@/Components/Input';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
@@ -37,9 +36,11 @@ export default function Login({ canResetPassword, status }: LoginProps) {
         <AuthCard>
             <Head title="Login" />
 
-            <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">
-                Sistema de Livraria
-            </h1>
+            <div className="text-center mb-8">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    Sistema de Livraria
+                </h1>
+            </div>
 
             {status && (
                 <div className="mb-4 text-sm text-green-600 dark:text-green-400 text-center">
@@ -47,15 +48,16 @@ export default function Login({ canResetPassword, status }: LoginProps) {
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                    <InputLabel htmlFor="email" value="E-mail" />
+                    <InputLabel htmlFor="email" value="E-mail" className="mb-1.5" />
                     <Input
                         id="email"
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        placeholder="Digite seu email"
+                        className="block w-full px-4 py-3"
                         autoComplete="username"
                         isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}
@@ -63,45 +65,49 @@ export default function Login({ canResetPassword, status }: LoginProps) {
                     <InputError className="mt-2" message={errors.email} />
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Senha" />
+                <div>
+                    <InputLabel htmlFor="password" value="Senha" className="mb-1.5" />
                     <Input
                         id="password"
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        placeholder="Digite sua senha"
+                        className="block w-full px-4 py-3"
                         autoComplete="current-password"
                         onChange={(e) => setData('password', e.target.value)}
                     />
                     <InputError className="mt-2" message={errors.password} />
                 </div>
 
-                <div className="block mt-4">
+                <div className="flex items-center justify-between">
                     <label className="flex items-center">
                         <Checkbox
                             name="remember"
                             checked={data.remember}
                             onChange={(e) => setData('remember', e.target.checked)}
                         />
-                        <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">Lembrar-me</span>
+                        <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
+                            Lembrar-me
+                        </span>
                     </label>
-                </div>
 
-                <div className="flex items-center justify-end mt-4">
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                            className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
                         >
                             Esqueceu sua senha?
                         </Link>
                     )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Entrar
-                    </PrimaryButton>
                 </div>
+
+                <PrimaryButton
+                    className="w-full py-3 text-base font-medium"
+                    disabled={processing}
+                >
+                    Entrar
+                </PrimaryButton>
             </form>
         </AuthCard>
     );
