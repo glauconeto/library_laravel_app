@@ -66,6 +66,10 @@ class User extends Authenticatable
 
     public function canBorrow(): bool
     {
+        if (!$this->can('borrow books')) {
+            return false;
+        }
+        
         return $this->activeLoans()->count() < 3;
     }
 }

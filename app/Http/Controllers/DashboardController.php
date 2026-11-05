@@ -25,7 +25,7 @@ class DashboardController extends Controller
             return redirect()->route('login');
         }
 
-        $isLibrarian = method_exists($user, 'hasRole') ? $user->hasRole('librarian') : false;
+        $isLibrarian = $user->can('manage books') && $user->can('manage loans');
 
         if ($isLibrarian) {
             return $this->librarianDashboard($request);
@@ -124,7 +124,7 @@ class DashboardController extends Controller
     public function stats(Request $request): array
     {
         $user = auth()->user();
-        $isLibrarian = method_exists($user, 'hasRole') && $user->hasRole('librarian');
+        $isLibrarian = $user->can('manage books') && $user->can('manage loans');
 
         if ($isLibrarian) {
             return [

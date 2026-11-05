@@ -31,7 +31,7 @@ class FeedbackPolicy
      */
     public function create(User $user, Book $book): bool
     {
-        if ($user->hasRole('librarian')) {
+        if ($user->can('manage books')) {
             return true;
         }
 

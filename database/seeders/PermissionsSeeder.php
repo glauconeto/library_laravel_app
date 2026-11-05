@@ -17,9 +17,17 @@ class PermissionsSeeder extends Seeder
 
         $guard = 'web';
 
+        // Book permissions
         Permission::findOrCreate('view books', $guard);
         Permission::findOrCreate('borrow books', $guard);
         Permission::findOrCreate('manage books', $guard);
+        
+        // Loan permissions
+        Permission::findOrCreate('view loans', $guard);
         Permission::findOrCreate('manage loans', $guard);
+        
+        // Feedback permissions
+        Permission::findOrCreate('create feedback', $guard);
+        Permission::findOrCreate('manage feedback', $guard);
     }
 }

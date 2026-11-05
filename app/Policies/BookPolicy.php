@@ -28,7 +28,7 @@ class BookPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasRole('librarian');
+        return $user->can('manage books');
     }
 
     /**
@@ -36,7 +36,7 @@ class BookPolicy
      */
     public function update(User $user, Book $book): bool
     {
-        return $user->hasRole('librarian');
+        return $user->can('manage books');
     }
 
     /**
@@ -44,7 +44,7 @@ class BookPolicy
      */
     public function delete(User $user, Book $book): bool
     {
-        return $user->hasRole('librarian') && !$book->loans()->whereNull('returned_at')->exists();
+        return $user->can('manage books') && !$book->loans()->whereNull('returned_at')->exists();
     }
 
     /**

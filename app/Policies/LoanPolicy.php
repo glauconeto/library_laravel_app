@@ -22,7 +22,7 @@ class LoanPolicy
      */
     public function view(User $user, Loan $loan): bool
     {
-        return $user->hasRole('librarian') || $loan->user_id === $user->id;
+        return $user->can('manage loans') || $loan->user_id === $user->id;
     }
 
     /**
@@ -30,7 +30,7 @@ class LoanPolicy
      */
     public function create(User $user, Book $book): bool
     {
-        if (!$user->canBorrow()) {
+        if (!$user->can('borrow books')) {
             return false;
         }
 
@@ -57,7 +57,7 @@ class LoanPolicy
      */
     public function delete(User $user, Loan $loan): bool
     {
-        return $user->hasRole('librarian') && $loan->returned_at !== null;
+        return $user->can('manage loans') && $loan->returned_at !== null;
     }
 
     /**

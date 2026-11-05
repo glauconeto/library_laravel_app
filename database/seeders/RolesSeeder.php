@@ -21,7 +21,24 @@ class RolesSeeder extends Seeder
         $reader = Role::findOrCreate('reader', $guard);
         $librarian = Role::findOrCreate('librarian', $guard);
 
-        $reader->givePermissionTo(['view books', 'borrow books']);
-        $librarian->givePermissionTo(['view books', 'borrow books', 'manage books', 'manage loans']);
+        // Reader permissions
+        $reader->givePermissionTo([
+            'view books',
+            'borrow books',
+            'view loans',
+            'create feedback',
+            'manage feedback'
+        ]);
+        
+        // Librarian permissions (all)
+        $librarian->givePermissionTo([
+            'view books',
+            'borrow books',
+            'manage books',
+            'view loans',
+            'manage loans',
+            'create feedback',
+            'manage feedback'
+        ]);
     }
 }

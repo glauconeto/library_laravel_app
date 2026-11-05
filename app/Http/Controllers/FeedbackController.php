@@ -61,7 +61,7 @@ class FeedbackController extends Controller
                            ->whereNotNull('returned_at')
                            ->exists();
 
-        if (!$hasReturnedLoan && !$user->hasRole('librarian')) {
+        if (!$hasReturnedLoan && !$user->can('manage books')) {
             return back()->with('error', 'Você só pode avaliar livros que pegou emprestado e devolveu.');
         }
 
