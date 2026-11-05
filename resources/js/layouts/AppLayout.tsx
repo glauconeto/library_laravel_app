@@ -2,6 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 
 declare const route: (name: string, params?: unknown) => string;
 import FlashMessage from '@/Components/FlashMessage';
+import ThemeToggle from '@/Components/ThemeToggle';
 import { User, PageProps } from '@/Types';
 
 interface AppLayoutProps {
@@ -46,6 +47,7 @@ export default function AppLayout({ children, user }: AppLayoutProps) {
                         </div>
                         <div className="flex items-center">
                             <div className="flex items-center gap-4">
+                                <ThemeToggle />
                                 <span className="text-sm text-gray-700 dark:text-gray-300">
                                     {isLibrarian && '👤 '}
                                     {currentUser?.name}

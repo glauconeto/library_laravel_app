@@ -11,5 +11,18 @@
     </head>
     <body class="font-sans antialiased">
         @inertia
+        
+        <script>
+            // Detecta e aplica o tema antes do React carregar
+            (function() {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const savedTheme = localStorage.getItem('theme');
+                const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+                
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                }
+            })();
+        </script>
     </body>
 </html>
