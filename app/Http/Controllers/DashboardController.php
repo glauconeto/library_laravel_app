@@ -124,7 +124,7 @@ class DashboardController extends Controller
     public function stats(Request $request): array
     {
         $user = auth()->user();
-        $isLibrarian = $user->hasRole('librarian');
+        $isLibrarian = method_exists($user, 'hasRole') && $user->hasRole('librarian');
 
         if ($isLibrarian) {
             return [

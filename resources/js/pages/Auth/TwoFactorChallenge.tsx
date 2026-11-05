@@ -31,8 +31,8 @@ export default function TwoFactorChallenge() {
 
             <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
                 {useRecoveryCode
-                    ? 'Please enter your recovery code to continue.'
-                    : 'Please enter the 6-digit code from your authenticator app.'}
+                    ? 'Por favor, insira seu código de recuperação para continuar.'
+                    : 'Por favor, insira o código de 6 dígitos do seu aplicativo de autenticação.'}
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -74,13 +74,13 @@ export default function TwoFactorChallenge() {
                         className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
                         onClick={() => setUseRecoveryCode(!useRecoveryCode)}
                     >
-                        {useRecoveryCode ? 'Use an authentication code' : 'Use a recovery code'}
+                        {useRecoveryCode ? 'Usar código de autenticação' : 'Usar código de recuperação'}
                     </button>
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
                     <PrimaryButton disabled={processing}>
-                        Login
+                        Entrar
                     </PrimaryButton>
                 </div>
             </form>

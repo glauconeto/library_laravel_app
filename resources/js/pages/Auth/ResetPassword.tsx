@@ -82,7 +82,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
 
                 <div className="flex items-center justify-end mt-4">
                     <PrimaryButton disabled={processing}>
-                        Reset Password
+                        Redefinir Senha
                     </PrimaryButton>
                 </div>
             </form>
