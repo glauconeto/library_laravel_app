@@ -11,14 +11,25 @@
     </head>
     <body class="font-sans antialiased">
         <script>
-            // Detecta e aplica o tema antes do React carregar
+            // Detecta e aplica o tema antes do React carregar (evita flash)
             (function() {
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 const savedTheme = localStorage.getItem('theme');
-                const theme = savedTheme || (prefersDark ? 'dark' : 'light');
                 
-                if (theme === 'dark') {
+                let isDark = false;
+                if (savedTheme === 'dark') {
+                    isDark = true;
+                } else if (savedTheme === 'light') {
+                    isDark = false;
+                } else {
+                    // system ou não definido - segue o sistema
+                    isDark = prefersDark;
+                }
+                
+                if (isDark) {
                     document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
                 }
             })();
         </script>
