@@ -10,8 +10,6 @@
         @vite(['resources/css/app.css', 'resources/js/app.tsx'])
     </head>
     <body class="font-sans antialiased">
-        @inertia
-        
         <script>
             // Detecta e aplica o tema antes do React carregar
             (function() {
@@ -24,5 +22,6 @@
                 }
             })();
         </script>
+        @inertia
     </body>
 </html>

@@ -11,10 +11,13 @@ export default function ThemeToggle() {
         // Verifica se há preferência salva no localStorage
         const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
         
-        const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+        // Verifica o estado atual do DOM
+        const isDark = document.documentElement.classList.contains('dark');
+        
+        const initialTheme = savedTheme || (isDark ? 'dark' : (prefersDark ? 'dark' : 'light'));
         setTheme(initialTheme);
         
-        // Aplica o tema ao document
+        // Sincroniza o DOM com o tema inicial
         if (initialTheme === 'dark') {
             document.documentElement.classList.add('dark');
         } else {
@@ -24,7 +27,8 @@ export default function ThemeToggle() {
         // Escuta mudanças nas preferências do sistema
         const handler = (e: MediaQueryListEvent) => {
             if (!localStorage.getItem('theme')) {
-                setTheme(e.matches ? 'dark' : 'light');
+                const newTheme = e.matches ? 'dark' : 'light';
+                setTheme(newTheme);
             }
         };
         mediaQuery.addEventListener('change', handler);
@@ -44,7 +48,10 @@ export default function ThemeToggle() {
     }, [theme]);
 
     const toggleTheme = () => {
-        setTheme(prev => prev === 'light' ? 'dark' : 'light');
+        setTheme(prev => {
+            const newTheme = prev === 'light' ? 'dark' : 'light';
+            return newTheme;
+        });
     };
 
     return (
