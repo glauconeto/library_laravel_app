@@ -11,16 +11,21 @@ use Inertia\Response;
 
 class LoanController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Loan::class, 'loan');
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request): Response
     {
         $user = auth()->user();
+        $isLibrarian = $user->hasRole('librarian');
 
         $loans = Loan::query()
             ->with(['book', 'user'])
-            ->when($user->hasRole('librarian'), function ($query) {
+            ->when($isLibrarian, function ($query) {
                 return $query;
             }, function ($query) use ($user) {
                 return $query->where('user_id', $user->id);
@@ -41,7 +46,7 @@ class LoanController extends Controller
         return Inertia::render('Loans/Index', [
             'loans' => $loans,
             'filters' => $request->only(['status']),
-            'isLibrarian' => $user->hasRole('librarian'),
+            'isLibrarian' => $isLibrarian,
         ]);
     }
 
@@ -88,7 +93,7 @@ class LoanController extends Controller
         $user = auth()->user();
 
         if ($loan->user_id !== $user->id && !$user->hasRole('librarian')) {
-            return back()->with('error', 'Unauthorized action.');
+            return back()->with('error', 'Ação não autorizada.');
         }
 
         if ($loan->returned_at) {
@@ -126,8 +131,6 @@ class LoanController extends Controller
      */
     public function destroy(Loan $loan): RedirectResponse
     {
-        $this->authorize('delete', $loan);
-
         if (!$loan->returned_at) {
             return back()->with('error', 'Não é possível excluir um empréstimo ativo. Devolva o livro primeiro.');
         }
@@ -146,7 +149,7 @@ class LoanController extends Controller
         $user = auth()->user();
 
         if ($loan->user_id !== $user->id && !$user->hasRole('librarian')) {
-            return back()->with('error', 'Unauthorized action.');
+            return back()->with('error', 'Ação não autorizada.');
         }
 
         if ($loan->returned_at) {
