@@ -12,6 +12,10 @@ use Inertia\Response;
 
 class FeedbackController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Feedback::class, 'feedback');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -29,10 +33,14 @@ class FeedbackController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        $books = Book::orderBy('title')->get(['id', 'title'])->map(fn ($book) => [
-            'value' => $book->id,
-            'label' => $book->title,
-        ]);
+        $books = Book::query()
+            ->orderBy('title')
+            ->select('id', 'title')
+            ->get()
+            ->map(fn ($book) => [
+                'value' => $book->id,
+                'label' => $book->title,
+            ]);
 
         return Inertia::render('Feedbacks/Index', [
             'feedbacks' => $feedbacks,
@@ -98,8 +106,6 @@ class FeedbackController extends Controller
      */
     public function edit(Feedback $feedback): Response
     {
-        $this->authorize('update', $feedback);
-
         return Inertia::render('Feedbacks/Edit', [
             'feedback' => $feedback,
         ]);
@@ -110,8 +116,6 @@ class FeedbackController extends Controller
      */
     public function update(Request $request, Feedback $feedback): RedirectResponse
     {
-        $this->authorize('update', $feedback);
-
         $validated = $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
@@ -128,8 +132,6 @@ class FeedbackController extends Controller
      */
     public function destroy(Feedback $feedback): RedirectResponse
     {
-        $this->authorize('delete', $feedback);
-
         $book = $feedback->book;
         $feedback->delete();
 

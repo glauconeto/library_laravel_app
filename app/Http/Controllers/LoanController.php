@@ -11,6 +11,11 @@ use Inertia\Response;
 
 class LoanController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Loan::class, 'loan');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -88,7 +93,7 @@ class LoanController extends Controller
         $user = auth()->user();
 
         if ($loan->user_id !== $user->id && !$user->can('manage loans')) {
-            return back()->with('error', 'Unauthorized action.');
+            return back()->with('error', 'Ação não autorizada.');
         }
 
         if ($loan->returned_at) {
@@ -126,8 +131,6 @@ class LoanController extends Controller
      */
     public function destroy(Loan $loan): RedirectResponse
     {
-        $this->authorize('delete', $loan);
-
         if (!$loan->returned_at) {
             return back()->with('error', 'Não é possível excluir um empréstimo ativo. Devolva o livro primeiro.');
         }
@@ -146,7 +149,7 @@ class LoanController extends Controller
         $user = auth()->user();
 
         if ($loan->user_id !== $user->id && !$user->can('manage loans')) {
-            return back()->with('error', 'Unauthorized action.');
+            return back()->with('error', 'Ação não autorizada.');
         }
 
         if ($loan->returned_at) {
