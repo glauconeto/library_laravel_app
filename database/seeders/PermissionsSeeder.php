@@ -19,7 +19,6 @@ class PermissionsSeeder extends Seeder
 
         // Book permissions
         Permission::findOrCreate('view books', $guard);
-        Permission::findOrCreate('borrow books', $guard);
         Permission::findOrCreate('manage books', $guard);
         
         // Loan permissions

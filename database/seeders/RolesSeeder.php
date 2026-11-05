@@ -24,7 +24,6 @@ class RolesSeeder extends Seeder
         // Reader permissions
         $reader->givePermissionTo([
             'view books',
-            'borrow books',
             'view loans',
             'create feedback',
             'manage feedback'
@@ -33,7 +32,6 @@ class RolesSeeder extends Seeder
         // Librarian permissions (all)
         $librarian->givePermissionTo([
             'view books',
-            'borrow books',
             'manage books',
             'view loans',
             'manage loans',
