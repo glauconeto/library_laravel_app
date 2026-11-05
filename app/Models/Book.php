@@ -38,6 +38,11 @@ class Book extends Model
         return $this->hasMany(Feedback::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     /**
      * Determine if given book is available for loan.
      * 
