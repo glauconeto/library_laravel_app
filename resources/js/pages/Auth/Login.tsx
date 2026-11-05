@@ -41,11 +41,13 @@ export default function Login({ canResetPassword, status }: LoginProps) {
                 Sistema de Livraria
             </h1>
 
-            <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                {status}
-            </div>
+            {status && (
+                <div className="mb-4 text-sm text-green-600 dark:text-green-400 text-center">
+                    {status}
+                </div>
+            )}
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                     <InputLabel htmlFor="email" value="E-mail" />
                     <Input
