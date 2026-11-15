@@ -1,15 +1,17 @@
-import React from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
+
 import FlashMessage from '@/Components/FlashMessage';
-import { User } from '@/Types';
+import { User, PageProps } from '@/Types';
 
 interface AppLayoutProps {
     children: React.ReactNode;
-    user: User;
+    user?: User;
 }
 
 export default function AppLayout({ children, user }: AppLayoutProps) {
-    const isLibrarian = user?.roles?.some((role) => role.name === 'librarian');
+    const { auth } = usePage<PageProps>().props;
+    const currentUser = user ?? auth.user;
+    const isLibrarian = currentUser?.roles?.some((role) => role.name === 'librarian');
 
     const navLinks = [
         { href: route('dashboard'), label: 'Painel' },
@@ -45,7 +47,7 @@ export default function AppLayout({ children, user }: AppLayoutProps) {
                             <div className="flex items-center gap-4">
                                 <span className="text-sm text-gray-700 dark:text-gray-300">
                                     {isLibrarian && '👤 '}
-                                    {user?.name}
+                                    {currentUser?.name}
                                 </span>
                                 <Link
                                     href={route('logout')}

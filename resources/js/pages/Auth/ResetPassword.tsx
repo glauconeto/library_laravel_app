@@ -1,7 +1,6 @@
 import React from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import AuthCard from '@/Components/AuthCard';
-import AuthCardLogo from '@/Components/AuthCardLogo';
 import Input from '@/Components/Input';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';

@@ -1,12 +1,10 @@
 import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AuthCard from '@/Components/AuthCard';
-import AuthCardLogo from '@/Components/AuthCardLogo';
 import Input from '@/Components/Input';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import Checkbox from '@/Components/Checkbox';
 
 interface RegisterFormData {
     name: string;

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AuthCard from '@/Components/AuthCard';
-import AuthCardLogo from '@/Components/AuthCardLogo';
 import PrimaryButton from '@/Components/PrimaryButton';
 
 interface VerifyEmailProps {

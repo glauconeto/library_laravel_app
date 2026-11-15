@@ -1,9 +1,17 @@
-import React from 'react';
-import { Head, Link } from '@inertiajs/react';
-import AppLayout from '../../layouts/AppLayout';
-import PrimaryButton from '../../Components/PrimaryButton';
 
-export default function LoansShow({ loan, isOverdue, daysOverdue }) {
+import { Head, Link } from '@inertiajs/react';
+import AppLayout from '@/layouts/AppLayout';
+import PrimaryButton from '@/Components/PrimaryButton';
+import { Loan } from '@/Types';
+
+
+interface LoansShowProps {
+    loan: Loan;
+    isOverdue: boolean;
+    daysOverdue: number;
+}
+
+export default function LoansShow({ loan, isOverdue, daysOverdue }: LoansShowProps) {
     return (
         <AppLayout>
             <Head title={`Detalhes do Empréstimo - ${loan.book.title}`} />
