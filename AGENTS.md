@@ -215,9 +215,8 @@ The `pgsql` service runs `postgres:18-alpine`. Its data directory is `/var/lib/p
 
 ## Suggested Next Work
 
-Recently completed: TypeScript frontend migration (strict-clean, `.tsx` only), feature test suite on the Inertia contract (`test/feature-suite`, 85 tests on pgsql), PostgreSQL 18 volume fix.
+Recently completed: TypeScript frontend migration (strict-clean, `.tsx` only), feature test suite on the Inertia contract (`test/feature-suite`, 177 tests on pgsql), PostgreSQL 18 volume fix, README + docs/setup.md (fresh-clone guide & production checklist).
 
-- `chore/readme-setup` — reproducible dev setup docs (Sail, one-time `testing` database)
 - `fix/jetstream-delete-user`
 - `test/e2e` — optional browser-level smoke coverage
 - `api/v1` — only if a real API consumer appears (Sanctum already installed)

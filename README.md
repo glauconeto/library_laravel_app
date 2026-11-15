@@ -1,59 +1,70 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Library
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A library management system: a book catalog, loans with a 3-active-loan limit, due dates, star ratings on returned books, and role-based access. Built on Laravel 12 with an Inertia + React + TypeScript frontend, Fortify/Jetstream authentication and PostgreSQL 18 running in Docker through Laravel Sail.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Book catalog** with search, genre and availability filters
+- **Loans** with a maximum of 3 active loans per user, 14-day default due date and one-week extensions (not allowed when overdue)
+- **Feedback** with a 1–5 star rating — only after the book has been returned (librarians may post anytime)
+- **Roles**: `reader` and `librarian` (via Spatie Laravel Permission)
+- **Dark/light theme** toggle persisted per user
+- **TypeScript** frontend, strict-clean (`npx tsc --noEmit`)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Laravel 12 · Inertia.js · React 19 · TypeScript · Vite · Jetstream/Fortify (authentication) · Spatie Laravel Permission · PostgreSQL 18 · Laravel Sail (Docker)
 
-## Learning Laravel
+## Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- Docker Engine with the Docker Compose v2 plugin
+- Nothing else on the host: PHP, Composer, Node.js and PostgreSQL all live inside the containers
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Quick start
 
-## Laravel Sponsors
+```bash
+git clone https://github.com/glauconeto/library_laravel_app.git library
+cd library
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# point the app at the Sail Postgres (details in docs/setup.md)
+cat > .env <<'EOF'
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
 
-### Premium Partners
+DB_CONNECTION=pgsql
+DB_HOST=pgsql
+DB_PORT=5432
+DB_DATABASE=library
+DB_USERNAME=bob
+DB_PASSWORD=bob_1234
+EOF
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+./vendor/bin/sail up -d --build
+./vendor/bin/sail composer install
+./vendor/bin/sail npm install
+./vendor/bin/sail artisan key:generate
+./vendor/bin/sail artisan migrate --seed   # creates the schema + demo users
+./vendor/bin/sail exec pgsql createdb -U bob testing   # one-time, required by the test suite
+./vendor/bin/sail artisan test                          # 177 tests, all green
+```
 
-## Contributing
+Open http://localhost — sign in as `librarian@example.com` / `password` (librarian) or `reader@example.com` / `password` (reader).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+If port 80 is taken, start with `APP_PORT=8080 ./vendor/bin/sail up -d` and open http://localhost:8080.
 
-## Code of Conduct
+## Running tests
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+./vendor/bin/sail artisan test                # full suite (expects the `testing` database to exist)
+./vendor/bin/sail artisan test --filter Auth  # filter by name
+```
 
-## Security Vulnerabilities
+The test suite runs against **PostgreSQL** in a dedicated `testing` database (never the dev `library` database). `phpunit.xml` pins `DB_CONNECTION=pgsql` / `DB_DATABASE=testing`, and `tests/TestCase.php` re-seeds roles/permissions and forces the `testing` database on every test. Run tests through Sail — the host cannot reach Postgres directly.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Documentation
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **[docs/setup.md](docs/setup.md)** — detailed local setup, architecture map, troubleshooting and a production deployment checklist
+- **[AGENTS.md](AGENTS.md)** — conventions for agents and contributors (branching, commits, validation)
