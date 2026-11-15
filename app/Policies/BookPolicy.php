@@ -41,10 +41,14 @@ class BookPolicy
 
     /**
      * Determine whether the user can delete the model.
+     *
+     * Authorization only (librarian role). The business rule blocking
+     * deletion of books with active loans lives in BookController::destroy,
+     * which redirects back with a flash message instead of a bare 403.
      */
     public function delete(User $user, Book $book): bool
     {
-        return $user->hasRole('librarian') && !$book->loans()->whereNull('returned_at')->exists();
+        return $user->hasRole('librarian');
     }
 
     /**
