@@ -1,6 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
 
-declare const route: (name: string, params?: unknown) => string;
 import FlashMessage from '@/Components/FlashMessage';
 import { User, PageProps } from '@/Types';
 

@@ -4,7 +4,6 @@ import AppLayout from '@/layouts/AppLayout';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { Book, Loan, Feedback } from '@/Types';
 
-declare const route: (name: string, params?: unknown) => string;
 
 interface UserStats {
     active_loans: number;

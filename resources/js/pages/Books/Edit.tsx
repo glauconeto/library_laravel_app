@@ -5,7 +5,6 @@ import Input from '@/Components/Input';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { Book } from '@/Types';
 
-declare const route: (name: string, params?: unknown) => string;
 
 interface BookFormData {
     title: string;

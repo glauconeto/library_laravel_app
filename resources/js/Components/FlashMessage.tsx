@@ -2,11 +2,6 @@ import { useState, useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
 import { PageProps } from '@/Types';
 
-interface FlashData {
-    success?: string;
-    error?: string;
-}
-
 interface FlashMessageState {
     visible: boolean;
     message: string;

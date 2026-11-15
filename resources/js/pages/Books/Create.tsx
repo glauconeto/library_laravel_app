@@ -4,7 +4,6 @@ import AppLayout from '@/layouts/AppLayout';
 import Input from '@/Components/Input';
 import PrimaryButton from '@/Components/PrimaryButton';
 
-declare const route: (name: string, params?: unknown) => string;
 
 interface BookFormData {
     title: string;
