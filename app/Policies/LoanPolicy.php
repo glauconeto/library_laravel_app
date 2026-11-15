@@ -21,15 +21,19 @@ class LoanPolicy
      */
     public function view(User $user, Loan $loan): bool
     {
-        return $user->hasRole('librarian') || $loan->user_id === $user->id;
+        return $user->can('manage loans') || $loan->user_id === $user->id;
     }
 
     /**
      * Determine whether the user can create models.
+     *
+     * Mirrors User::canBorrow(): any user can create loans while under the
+     * active-loans limit (availability and duplicate checks stay with the
+     * controller).
      */
     public function create(User $user): bool
     {
-        return $user->canBorrow();
+        return $user->activeLoans()->count() < 3;
     }
 
     /**
@@ -45,7 +49,7 @@ class LoanPolicy
      */
     public function delete(User $user, Loan $loan): bool
     {
-        return $user->hasRole('librarian') && $loan->returned_at !== null;
+        return $user->can('manage loans') && $loan->returned_at !== null;
     }
 
     /**

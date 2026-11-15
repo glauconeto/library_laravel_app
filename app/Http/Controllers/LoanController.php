@@ -11,6 +11,11 @@ use Inertia\Response;
 
 class LoanController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Loan::class, 'loan');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -20,7 +25,7 @@ class LoanController extends Controller
 
         $loans = Loan::query()
             ->with(['book', 'user'])
-            ->when($user->hasRole('librarian'), function ($query) {
+            ->when($user->can('manage loans'), function ($query) {
                 return $query;
             }, function ($query) use ($user) {
                 return $query->where('user_id', $user->id);
@@ -41,7 +46,7 @@ class LoanController extends Controller
         return Inertia::render('Loans/Index', [
             'loans' => $loans,
             'filters' => $request->only(['status']),
-            'isLibrarian' => $user->hasRole('librarian'),
+            'isLibrarian' => $user->can('manage loans'),
         ]);
     }
 
@@ -87,8 +92,8 @@ class LoanController extends Controller
     {
         $user = auth()->user();
 
-        if ($loan->user_id !== $user->id && !$user->hasRole('librarian')) {
-            return back()->with('error', 'Unauthorized action.');
+        if ($loan->user_id !== $user->id && !$user->can('manage loans')) {
+            return back()->with('error', 'Ação não autorizada.');
         }
 
         if ($loan->returned_at) {
@@ -108,7 +113,7 @@ class LoanController extends Controller
     {
         $user = auth()->user();
 
-        if ($loan->user_id !== $user->id && !$user->hasRole('librarian')) {
+        if ($loan->user_id !== $user->id && !$user->can('manage loans')) {
             abort(403);
         }
 
@@ -126,8 +131,6 @@ class LoanController extends Controller
      */
     public function destroy(Loan $loan): RedirectResponse
     {
-        $this->authorize('delete', $loan);
-
         if (!$loan->returned_at) {
             return back()->with('error', 'Não é possível excluir um empréstimo ativo. Devolva o livro primeiro.');
         }
@@ -145,8 +148,8 @@ class LoanController extends Controller
     {
         $user = auth()->user();
 
-        if ($loan->user_id !== $user->id && !$user->hasRole('librarian')) {
-            return back()->with('error', 'Unauthorized action.');
+        if ($loan->user_id !== $user->id && !$user->can('manage loans')) {
+            return back()->with('error', 'Ação não autorizada.');
         }
 
         if ($loan->returned_at) {

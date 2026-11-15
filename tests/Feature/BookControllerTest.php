@@ -162,10 +162,8 @@ class BookControllerTest extends TestCase
 
         $response = $this->delete("/books/{$book->id}");
 
-        // Redirects back with error flash because book has active loans
-        $response->assertStatus(302);
-        $response->assertRedirect(route('books.index'));
-        $response->assertSessionHas('error', 'Não é possível excluir um livro com empréstimos ativos.');
+        // Policy denies deletion while an active loan exists (403)
+        $response->assertStatus(403);
 
         // Book should not be deleted
         $this->assertDatabaseHas('books', [

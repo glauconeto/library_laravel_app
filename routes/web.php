@@ -3,12 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Auth/Login', [
-        'canResetPassword' => true,
-        'status' => session('status'),
-    ]);
-})->middleware('guest');
+Route::redirect('/', '/login');
 
 Route::get('/login', function () {
     return Inertia::render('Auth/Login', [
@@ -74,6 +69,7 @@ Route::post('/loans/{loan}/extend', [App\Http\Controllers\LoanController::class,
 
 // Feedback routes
 Route::resource('feedbacks', App\Http\Controllers\FeedbackController::class)
+    ->only(['index', 'show', 'edit', 'update', 'destroy'])
     ->middleware('auth');
 
 Route::post('/books/{book}/feedback', [App\Http\Controllers\FeedbackController::class, 'store'])

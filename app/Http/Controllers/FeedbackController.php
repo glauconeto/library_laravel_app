@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Feedback;
-use App\Models\Loan;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -17,6 +16,8 @@ class FeedbackController extends Controller
      */
     public function index(Request $request): Response
     {
+        $this->authorize('viewAny', Feedback::class);
+
         $feedbacks = Feedback::query()
             ->with(['user', 'book'])
             ->when($request->rating, function ($query, $rating) {
@@ -29,10 +30,14 @@ class FeedbackController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        $books = Book::orderBy('title')->get(['id', 'title'])->map(fn ($book) => [
-            'value' => $book->id,
-            'label' => $book->title,
-        ]);
+        $books = Book::query()
+            ->orderBy('title')
+            ->select('id', 'title')
+            ->get()
+            ->map(fn ($book) => [
+                'value' => $book->id,
+                'label' => $book->title,
+            ]);
 
         return Inertia::render('Feedbacks/Index', [
             'feedbacks' => $feedbacks,
@@ -56,12 +61,7 @@ class FeedbackController extends Controller
             return back()->with('error', 'Você já avaliou este livro.');
         }
 
-        $hasActiveLoan = Loan::where('user_id', $user->id)
-                           ->where('book_id', $book->id)
-                           ->whereNotNull('returned_at')
-                           ->exists();
-
-        if (!$hasActiveLoan && !$user->hasRole('librarian')) {
+        if (! $user->can('create', [Feedback::class, $book])) {
             return back()->with('error', 'Você só pode avaliar livros que pegou emprestado e devolveu.');
         }
 
@@ -86,6 +86,8 @@ class FeedbackController extends Controller
      */
     public function show(Feedback $feedback): Response
     {
+        $this->authorize('view', $feedback);
+
         $feedback->load(['user', 'book']);
 
         return Inertia::render('Feedbacks/Show', [

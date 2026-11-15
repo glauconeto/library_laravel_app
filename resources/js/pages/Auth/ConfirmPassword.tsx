@@ -26,12 +26,12 @@ export default function ConfirmPassword() {
             <Head title="Confirm Password" />
 
             <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                This is a secure area of the application. Please confirm your password before continuing.
+                Esta é uma área segura do sistema. Por favor, confirme sua senha antes de continuar.
             </div>
 
             <form onSubmit={handleSubmit}>
                 <div>
-                    <InputLabel htmlFor="password" value="Password" children={undefined} />
+                    <InputLabel htmlFor="password" value="Senha" />
                     <Input
                         id="password"
                         type="password"
@@ -46,7 +46,7 @@ export default function ConfirmPassword() {
 
                 <div className="flex justify-end mt-4">
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Confirm
+                        Confirmar
                     </PrimaryButton>
                 </div>
             </form>

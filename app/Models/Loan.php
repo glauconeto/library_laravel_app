@@ -26,7 +26,6 @@ class Loan extends Model
     protected function casts(): array
     {
         return [
-            'status' => LoanStatus::class,
             'loan_date' => 'date',
             'due_date' => 'date',
             'returned_at' => 'datetime',

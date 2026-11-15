@@ -10,6 +10,15 @@
         @vite(['resources/css/app.css', 'resources/js/app.tsx'])
     </head>
     <body class="font-sans antialiased">
+        <script>
+            // Aplica o tema antes do React carregar (evita flash)
+            (function() {
+                const saved = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const isDark = saved ? saved === 'dark' : prefersDark;
+                document.documentElement.classList.toggle('dark', isDark);
+            })();
+        </script>
         @inertia
     </body>
 </html>
