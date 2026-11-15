@@ -1,5 +1,7 @@
 # Library
 
+[![CI](https://github.com/glauconeto/library_laravel_app/actions/workflows/ci.yml/badge.svg)](https://github.com/glauconeto/library_laravel_app/actions/workflows/ci.yml)
+
 A library management system: a book catalog, loans with a 3-active-loan limit, due dates, star ratings on returned books, and role-based access. Built on Laravel 12 with an Inertia + React + TypeScript frontend, Fortify/Jetstream authentication and PostgreSQL 18 running in Docker through Laravel Sail.
 
 ## Features

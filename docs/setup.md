@@ -176,5 +176,13 @@ Sail is a development environment. Production does not need it, but the app itse
 
 ## Known follow-ups (not yet done)
 
-- CI pipeline (e.g. GitHub Actions) running the pgsql test suite on every PR.
 - Production-optimized Dockerfile if you want to deploy as a container image.
+
+## CI
+
+GitHub Actions runs two jobs on every push/PR to `main` (`.github/workflows/ci.yml`):
+
+- **Feature suite** — PostgreSQL 18 service container, `php artisan test` against the `testing` database.
+- **Frontend** — `npx tsc --noEmit`, `npm run build`, manifest check.
+
+Both jobs cache their dependencies (`vendor/` keyed on `composer.lock`, `node_modules/` keyed on `package-lock.json`) and skip reinstalling on a hit, so steady-state runs are fast. The first run on a fresh repository warms the caches.
