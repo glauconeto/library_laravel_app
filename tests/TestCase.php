@@ -20,6 +20,10 @@ abstract class TestCase extends BaseTestCase
 
         parent::setUp();
 
+        // Render pages without requiring a compiled Vite manifest: swap the
+        // Vite service for a no-op so the Blade shell does not throw.
+        $this->withoutVite();
+
         // Seed the roles/permissions every test relies on (RefreshDatabase
         // recreates the scheme, so the Spatie tables start empty).
         $this->seed([

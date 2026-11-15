@@ -57,6 +57,10 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --prefer-dist --no-interaction --no-progress
 
+      # An empty .env keeps phpdotenv from emitting a "Failed to open stream" warning per test.
+      - name: Prepare the environment file
+        run: touch .env
+
       - name: Create the testing database
         run: php -r "new PDO('pgsql:host=127.0.0.1;port=5432;dbname=library', 'bob', 'bob_1234')->exec('CREATE DATABASE testing');"
 
