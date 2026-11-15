@@ -60,7 +60,7 @@ EOF
 
 # 3) install dependencies inside the containers
 ./vendor/bin/sail composer install
-./vendor/bin/sail npm install
+./vendor/bin/sail npm ci
 
 # 4) generate the app key (rewrites only APP_KEY inside .env)
 ./vendor/bin/sail artisan key:generate
@@ -152,7 +152,7 @@ Sail is a development environment. Production does not need it, but the app itse
 4. **Install and build**:
    ```bash
    composer install --no-dev --optimize-autoloader
-   npm install        # note: package-lock.json is gitignored — consider committing it for reproducible builds
+   npm ci             # reproducible install from the committed lockfile
    npm run build      # produces public/build (required by @vite in the Blade shell)
    ```
 5. **Database**:
@@ -176,6 +176,5 @@ Sail is a development environment. Production does not need it, but the app itse
 
 ## Known follow-ups (not yet done)
 
-- Commit `package-lock.json` for reproducible frontend builds.
 - CI pipeline (e.g. GitHub Actions) running the pgsql test suite on every PR.
 - Production-optimized Dockerfile if you want to deploy as a container image.

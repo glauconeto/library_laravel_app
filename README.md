@@ -44,7 +44,7 @@ EOF
 
 ./vendor/bin/sail up -d --build
 ./vendor/bin/sail composer install
-./vendor/bin/sail npm install
+./vendor/bin/sail npm ci
 ./vendor/bin/sail artisan key:generate
 ./vendor/bin/sail artisan migrate --seed   # creates the schema + demo users
 ./vendor/bin/sail exec pgsql createdb -U bob testing   # one-time, required by the test suite
