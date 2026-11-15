@@ -15,10 +15,10 @@ The goal for anyone working here, whether human or agent, is:
 ## Stack
 
 - Backend: PHP 8.2+, Laravel 12
-- Frontend: Inertia.js + React + Vite
+- Frontend: Inertia.js + React + TypeScript + Vite
 - Auth: Fortify + Jetstream + Sanctum
 - Permissions: Spatie Laravel Permission
-- Database: PostgreSQL
+- Database: PostgreSQL 18
 - Preferred local environment: Laravel Sail / Docker Compose
 
 ## Important Structure
@@ -26,7 +26,8 @@ The goal for anyone working here, whether human or agent, is:
 - `app/` application logic
 - `app/Actions/Fortify/` authentication flow actions
 - `app/Providers/` auth and bootstrap providers
-- `resources/js/` React pages, layouts, and components
+- `resources/js/` React + TypeScript pages, layouts, and components (`.tsx` only)
+- `resources/js/globals.d.ts` global declarations for `Ziggy` and `route`
 - `resources/views/` Inertia Blade shell and helper views
 - `routes/web.php` Inertia web routes
 - `routes/api.php` API routes
@@ -112,25 +113,24 @@ git diff main...HEAD
 
 ## Useful Project Commands
 
-### Local Environment with Composer/NPM
-
-```bash
-composer install
-npm install
-php artisan key:generate
-php artisan migrate
-composer test
-npm run build
-```
+Prefer Sail for everything. The project `.env` targets the Sail network (`DB_HOST=pgsql`), so host-direct `php artisan` / `composer test` cannot reach the database from outside Docker.
 
 ### Environment with Sail
 
 ```bash
 ./vendor/bin/sail up -d
 ./vendor/bin/sail artisan migrate
-./vendor/bin/sail composer test
-./vendor/bin/sail npm run build
+./vendor/bin/sail exec pgsql createdb -U bob testing   # one-time: required by the test suite
+./vendor/bin/sail artisan test                         # full feature suite (pgsql, testing db)
+./vendor/bin/sail npm run build                        # also validates the TS build
+./vendor/bin/sail artisan tinker                       # REPL inside the container
 ```
+
+`npx tsc --noEmit` must stay clean (strict mode). There are no `.jsx` files under `resources/js/`; pages are resolved as `./pages/**/*.tsx`, see `resources/js/app.tsx`.
+
+### Host-side (not supported for the database)
+
+Host-direct commands only work for things that do not touch the database (e.g. `npx tsc`, `npm run build`). Anything hitting Postgres must run through Sail.
 
 ## Validation Checklist
 
@@ -144,6 +144,7 @@ Before completing a branch, validate at least what was affected.
 - password reset
 - authenticated route access
 - correct redirects
+- `./vendor/bin/sail artisan test --filter AuthTest`
 
 ### For Domain Changes
 
@@ -151,9 +152,12 @@ Before completing a branch, validate at least what was affected.
 - model relationships without errors
 - routes responding correctly
 - proper error feedback
+- `./vendor/bin/sail artisan test`
 
 ### For Frontend Changes
 
+- `npx tsc --noEmit` clean
+- `npm run build` ok
 - page opens without error
 - Inertia navigation works
 - form submits correctly
@@ -188,23 +192,35 @@ If `100755` appears on regular PHP files, fix before completing:
 chmod 644 path/to/file.php
 ```
 
+### 4. PostgreSQL 18 and Volume
+
+The `pgsql` service runs `postgres:18-alpine`. Its data directory is `/var/lib/postgresql/18/docker`, so the named volume `sail-pgsql` must be mounted at `/var/lib/postgresql` (not `/var/lib/postgresql/data`). Do not "downgrade" the mount path and do not remove the volume without explicit confirmation — it holds the dev database.
+
+### 5. Environment Files
+
+- `.env` is never committed. In this repo it targets the Sail network (`DB_HOST=pgsql`), not the host.
+- `phpunit.xml` pins `DB_CONNECTION=pgsql` and `DB_DATABASE=testing`; the `testing` database must be created once in the Sail Postgres (see Useful Project Commands).
+- The web process inside the container does not inherit the Compose `environment:` variables and reads `.env` instead — keep its DB values pointing at the `pgsql` service.
+
 ## What an Agent Should Avoid
 
 - editing files unrelated to the branch goal;
 - mixing refactor with feature in the same commit;
 - adding dependencies without clear need;
 - changing environment config without documenting;
+- changing `.env` to point at host-reachable addresses (the container does not inherit the Compose environment and reads `.env` instead);
+- removing or recreating docker volumes;
 - reverting user work without explicit request;
 - making automatic commits without diff review.
 
 ## Suggested Next Work
 
-- `fix/auth-flow`
+Recently completed: TypeScript frontend migration (strict-clean, `.tsx` only), feature test suite on the Inertia contract (`test/feature-suite`, 85 tests on pgsql), PostgreSQL 18 volume fix.
+
+- `chore/readme-setup` — reproducible dev setup docs (Sail, one-time `testing` database)
 - `fix/jetstream-delete-user`
-- `test/auth-feature-tests`
-- `feat/books-crud`
-- `feat/loans-flow`
-- `feat/user-roles-permissions`
+- `test/e2e` — optional browser-level smoke coverage
+- `api/v1` — only if a real API consumer appears (Sanctum already installed)
 
 ## Definition of Done
 
